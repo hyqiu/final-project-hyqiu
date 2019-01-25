@@ -33,6 +33,7 @@ contract('BikeSharing', function(accounts) {
 	let bikeShop;
 	let totalGoodRides;
 	let totalRides;
+	let clientCount; 
 	let balance;
 	let returnedToUser;
 
@@ -75,6 +76,10 @@ contract('BikeSharing', function(accounts) {
 		bikeInUse = await bikeShop.checkBikeStatus(bike_id, {from: bikeAdmin});
 		assert.isTrue(bikeInUse, 'The bike was not properly rented');
 
+		// There should be 2 clients
+		clientCount = await bikeShop.getClientCount({from: bikeAdmin});
+		assert.isEqual(clientCount, 2, 'Wrong count of clients');
+
 		// Test if it was counted properly for the careful user
 		await bikeShop.surrenderBike(idBike0, true, {from: careful_renter});
 		totalRides = await bikeShop.getTotalRides(careful_renter, {from: bikeAdmin});
@@ -103,6 +108,10 @@ contract('BikeSharing', function(accounts) {
 		await bikeShop.rentBike(idBike0, {from: careful_renter, value: deposit});
 		await bikeShop.rentBike(idBike1, {from: carefree_renter, value: deposit});
 
+		// There should be 2 clients
+		clientCount = await bikeShop.getClientCount({from: bikeAdmin});
+		assert.isEqual(clientCount, 2, 'Wrong count of clients');
+
 		// Test if the contract bears 2 ethers
 		const totalReceived = web3.eth.getBalance(bikeShop.address);
 		assert.equal(totalReceived.toString(10), (2 * deposit).toString(10), "Did not receive the proper amount");
@@ -123,24 +132,32 @@ contract('BikeSharing', function(accounts) {
 
 	});
 
-	it("should be impossible for a biker in ride not rent another bike while riding", async() => {
+	it("should be impossible for a biker in ride to rent another bike while riding", async() => {
 
 		await bikeShop.rentBike(idBike0, {from: careful_renter, value: deposit});
-		
-		
+
+		try {
+			await bikeShop.rentBike(idBike1, {from: careful_renter, value: deposit});
+		} catch (error) {
+			return true;
+		}
+		throw new Error ("This should not be seen !");
 
 	});
 
-	it("should be impossible to rent a bike that is already rented", async() => {
+	it("should be impossible to rent a bike that is currently in use", async() => {
 		
 		await bikeShop.rentBike(idBike0, {from: careful_renter, value: deposit});
 
-		// Capturer l'erreur de louer un vélo 
+		try {
+			await bikeShop.rentBike(idBike0, {from: carefree_renter, value: deposit});
+		} catch (error) {
+			return true;
+		}
+		throw new Error ("This should not be seen !");
 		
 	});
 
-	// A biker in ride should be not able to rent another while riding
-	// A bike already in ride should not be able 
 	// A banned client cannot rent a bike any more. 
 
 	
