@@ -259,7 +259,7 @@ contract Insurance {
     /// @param grossAmount : The value of the claim to repay the client
     /// @param retention : the retention (portion of value not reimbursed to client)
     function getClaimAmount(uint256 grossAmount, uint256 retention)
-        view
+        pure
         internal
         returns (uint256 claimAmount)
     {
