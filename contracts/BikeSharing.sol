@@ -225,7 +225,7 @@ contract BikeSharing {
         payable
         validParametersBike(bikeId) 
         adminExcluded
-        returns (bool success, uint256 nbRides) 
+        returns (bool success) 
     {
 
         // Require that the user pays the right amount for the bike
@@ -299,7 +299,7 @@ contract BikeSharing {
         clientMapping[msg.sender].numberRides += 1;
         emit ClientInRide(msg.sender);
 
-        return(bikeMapping[bikeId].currentlyInUse, clientMapping[msg.sender].numberRides);
+        return bikeMapping[bikeId].currentlyInUse;
 
     }
     
@@ -379,6 +379,15 @@ contract BikeSharing {
     {
         Client memory client = clientMapping[clientAdr];
         return client.goodRides;
+    }
+
+    function getReturned(address clientAdr)
+        public 
+        view
+        returns (uint256 returnedAmount)
+    {
+        Client memory client = clientMapping[clientAdr];
+        return client.returnedAmount;
     }
     
     function getBikeValue()
