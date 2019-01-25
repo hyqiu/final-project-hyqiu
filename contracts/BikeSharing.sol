@@ -387,7 +387,7 @@ contract BikeSharing {
         returns (uint256 returnedAmount)
     {
         Client memory client = clientMapping[clientAdr];
-        return client.returnedAmount;
+        return client.returned;
     }
     
     function getBikeValue()
