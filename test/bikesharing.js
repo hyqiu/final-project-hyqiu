@@ -1,4 +1,4 @@
-const BikeSharing = artifacts.require('./contracts/BikeSharing_v2.sol');
+const BikeSharing = artifacts.require('../contracts/BikeSharing.sol');
 
 function increaseTime(duration) {
 	const id = Date.now();
