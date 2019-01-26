@@ -38,34 +38,4 @@ Workflow :
 		* The bike sharing contract can modify the count of accident. 
 		* The insurance contract will automate payment of one bike
 
-======================================================== Ideas ======================================================== 
-- Ban client (last resort, after fake declaration) --> TO IMPLEMENT
-- A Proof-of-Existence contract where you must prove the bike still looks good. 
-- Send to repair shop the broken ones if it falls below a certain threshold ? 
-- Add IPFS geolocation ? 
-
-======================================================== Things to clean ======================================================== 
-- The Bike Struct (with enum, no need for currentlyInUse !)
-
-===========
-
-Possible tests : 
-- How much does the insured pay ? 
-- 5 tokens = -1 accidentCount
-
-
-
-
-================================================================================================================================================
-
-
-TO DO : 
-1) CHANGE CONDITION OF THE BIKE
-2) Possibility to revoke a customer
-3) Cancel subscription, BUT before that pay back ALL the fees that are due to you
-4) Add getter function for Behaviour Token
-
-
-
-
 
