@@ -423,4 +423,13 @@ contract Insurance {
         }
     }
 
+    function getPremiumRate()
+        external
+        pure
+        returns (uint256 rate)
+    {
+        return PREMIUM_RATE;
+    }
+
+
 }

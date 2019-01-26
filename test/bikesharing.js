@@ -23,10 +23,6 @@ function increaseTime(duration) {
   })
 }
 
-function assertJump(error) {
-	assert.isAbove(error.message.search('invalid opcode'), -1, 'Invalid opcode error must be returned');
-}
-
 contract('BikeSharing', function(accounts) {
 
 	let bikeInUse;
@@ -92,7 +88,7 @@ contract('BikeSharing', function(accounts) {
 		bikeInUse = await bikeShop.checkBikeStatus(idBike1, {from: carefree_renter});
 		assert.isTrue(bikeInUse, 'Bike 2 was not properly rented');
 
-		// There should be 2 clients
+		// There should be 3 registered clients so far
 		clientCount = await bikeShop.getClientCount({from: bikeAdmin});
 		assert.equal(clientCount, 3, 'Wrong count of clients');
 
