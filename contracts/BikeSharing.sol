@@ -397,5 +397,24 @@ contract BikeSharing {
     {
         return BIKE_VALUE;
     }
+
+   function checkBikeStatus (uint256 bikeId)
+        public
+        view
+        returns (bool inUse)
+    {
+        Bike memory bike = bikeMapping[bikeId];
+        return bike.currentlyInUse;
+    }
+
+    function checkBike (uint256 bikeId)
+        public
+        view
+        returns (address lastRenter, bool condition, bool currentlyInUse, uint usageTime, BikeState state)
+    {
+        Bike memory bike = bikeMapping[bikeId];
+        return (bike.lastRenter, bike.condition, bike.currentlyInUse, bike.usageTime, bike.state);
+    }
+    
     
 }
