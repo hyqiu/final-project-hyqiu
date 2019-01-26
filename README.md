@@ -1,23 +1,26 @@
-# CA_final_project
+# Consensys Academy Final Project
 
-- Create a contract that manages the administration of the scooter-renting scheme : people rent a bike in a list, give it back and are charged accordingly
-	- [x] Create a fault-less contract on Remix
-	- [] Create a mapping, avoiding the constructor to loop and gas overflow
-	- [] Allow usage of non-integer (division purposes)
-	- [] The deposit can only be redeemed 2 days later (2 days are sufficient for another one to make a claim)
-- Create a contract that allows insurance mechanism
-- Implement a token-based reward system, which allows for the insurer to handle the deficiency issue
+This Dapp provides a use-case for an on-demand insurance contract, applied to a bike rental company. 
 
-|                     |                            User bought insurance                           |   User didn't buy insurance  |
-|---------------------|:--------------------------------------------------------------------------:|:----------------------------:|
-|       No claim      | Token rewarded to user                                                     | Nothing happens              |
-|  Claim by last user | No token rewarded to user The insurer pays 80%, the user 20%               | User must redeem the deposit |
-| Claim by other user | Token count is forced to 0 (dishonesty) The insurer pays 20%, the user 80% | User must redeem the deposit |
+The process works as follows :
 
-What can an insurance contract do ? 
-- Record keeping for the token
-- Keep a balance of premia and claim fees for auditability
-- Receives the subscription money
+- A customer rents a bike in a total of 1000 bikes, rides it for a certain amount of time and returns it. 
+- At rental time, the customer pays a deposit corresponding to the bike's face value. When they return the bike, they are charged according to the time (in minutes) spent riding the bike.
+- When returned, a bike can be in good or bad condition. 
+	* If the bike is in good condition, the deposit is returned to the user, minus the fee corresponding to the time spent riding the bike. 
+	* If the bike is in bad condition, the deposit is not returned to the user.
+	* If the bike has been ridden for more than 24 hours, the deposit is not returned to the user.
+
+- Users can choose to underwrite insurance, so that their deposit can be reimbursed in part if they damange the bike. 
+- At underwriting time (i.e. user chooses to buy insurance), the user must pay the first premium upfront.
+- The premium works as "pay-as-you-ride" : the user only pays as much premium as the number of rides that he or she has made. 
+- Provided the user bought insurance, at the end of a ride : 
+	* If the bike is returned in good condition, an ERC20 token is minted for the user, as reward for "good riding behaviour".
+	* If the bike is returned in bad condition, the deposit is paid back to the user, minus a retention.
+- The premium amount is conditioned on the number of claims (i.e. times they returned a bike in bad condition), so that "The more claims a user made in the past, the more he/she is going to pay".
+	* Yet, a user can redeem tokens they earned as "good riders" to decrease their claims history.
+
+=====================================================================================================================
 
 Workflow : 
 - Buy insurance.
@@ -36,7 +39,6 @@ Workflow :
 		* The insurance contract will automate payment of one bike
 
 ======================================================== Ideas ======================================================== 
-- Customer can reduce their accident count by redeeming a token --> TO IMPLEMENT IN INSURANCE CONTRACT
 - Ban client (last resort, after fake declaration) --> TO IMPLEMENT
 - A Proof-of-Existence contract where you must prove the bike still looks good. 
 - Send to repair shop the broken ones if it falls below a certain threshold ? 
@@ -47,25 +49,10 @@ Workflow :
 
 ===========
 
-- Initialize a number of deployed. 
-- When it is used for the first time, push it into the array !
-
-- IF THE BIKE IS BROKEN, DEACTIVATE IT
-
-===========
-
 Possible tests : 
 - How much does the insured pay ? 
 - 5 tokens = -1 accidentCount
 
-===========
-
-- Security issue : what if the guy rents another one ? OK --> added enums
-
-===========
-
-- THE PEOPLE WHO HAVE INSURANCE MUST HAVE A PUBLIC VIEWABLE RECORD, COMMON TO INSURANCE COMPANY AND BIKE COMPANY
-- TOKENCOUNT MUST BE PUBLIC AS WELL
 
 
 
