@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import BikeSharing from "../../build/contracts/BikeSharing.json";
-import Insurance from "../../build/contracts/Insurance.json";
+import BikeSharing from "./contracts/BikeSharing.json";
+import Insurance from "./contracts/Insurance.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
@@ -42,7 +42,7 @@ class App extends Component {
   handleAccountChange = async () => {
     const {web3, activeAccount} = this.state;
     const refreshedAccounts = await web3.eth.getAccounts();
-    if (refreshedAccounts[0] != activeAccount) {
+    if (refreshedAccounts[0] !== activeAccount) {
       this.setState({
         accounts: refreshedAccounts,
         activeAccount: refreshedAccounts[0]
@@ -155,8 +155,8 @@ class App extends Component {
     await surrenderBike.send({from: accounts[0]})
     .once('receipt', (receipt) => {
       console.log(receipt);
-      const getReturned = bikeInstance.methods.getReturned(accounts[0]);
-      await getReturned.call({from: accounts[0]})
+      const getReturned = bikeContract.methods.getReturned(accounts[0]);
+      getReturned.call({from: accounts[0]})
       .then((receipt) => {
         console.log(receipt);
         this.setState({
@@ -199,7 +199,7 @@ class App extends Component {
     console.log(this.state.goodRidesCount);
   };
 
-  handleIntInput = (event) {
+  handleIntInput = (event) => {
     const intInput = (event.target.validity.valid) ? event.target.value : this.state.defaultIntInput;
     this.setState({ defaultIntInput: intInput });
   };
@@ -217,11 +217,11 @@ class App extends Component {
         pendingPremia: receipt
       });
       const regularize = insuranceContract.methods.regularizePayments();
-      await regularize.send({from: accounts[0], value: this.state.pendingPremia})
+      regularize.send({from: accounts[0], value: this.state.pendingPremia})
       .once('receipt', (receipt) => {
         console.log(receipt);
         const getInsuredStatus = insuranceContract.methods.viewInsuranceStatus(accounts[0]);
-        await getInsuredStatus.call({from: accounts[0]})
+        getInsuredStatus.call({from: accounts[0]})
         .then((receipt) => {
           this.setState({
             countClaims: receipt[4],
@@ -250,7 +250,7 @@ class App extends Component {
         const newClaims = countClaims - receipt[0];
         const newTokenCount = tokensOwned - receipt[1];        
         const claimReducer = insuranceContract.methods.tokenClaimReducer(tokensRedeemed);
-        await claimReducer.send({from: accounts[0]})
+        claimReducer.send({from: accounts[0]})
         .once('receipt', (receipt) => {
           console.log(receipt);
           this.setState({
@@ -259,9 +259,9 @@ class App extends Component {
           });
         })
         .on('error', console.error);
-      }
+      });
     }
-  };
+  }
 
 // What can we really do on the user interface side ?! --> please do the render side !!
 
@@ -392,12 +392,6 @@ class App extends Component {
             <p>You paid {this.state.premiumRate} as underwriting fee</p>
           </div>
 
-          {/* Regularize payments -
-          1) you paid x1 for x2 rides 
-          2) you now have y1 claims 
-          3) you now own z tokens
-          */}
-
         <h4 className="font-weight-normal">Regularize payments</h4>  {/*Regularize*/}
 
         <div>
@@ -436,12 +430,13 @@ class App extends Component {
 
               <button type="submit">Redeem Tokens</button>
             </form>
+
             <p>You redeemed {this.state.tokensRedeemed}</p>
             <p>You now own {this.state.tokensOwned}</p>
             <p>Your current claims count is {this.state.countClaims}</p>
 
-      </div> {/*Insurance corner ends*/}
-
+      </div> 
+    </div> 
     );
   }
 }
