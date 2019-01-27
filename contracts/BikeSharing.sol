@@ -163,7 +163,7 @@ contract BikeSharing {
 
     /// @dev Count the number of clients 
     /// @return Number of clients
-    function getClientCount() 
+    function getClientCount()
         public 
         view 
         returns(uint256 clientCount)
@@ -325,8 +325,8 @@ contract BikeSharing {
             emit BikeDeactivated(bikeId);
         } else {
             clientMapping[msg.sender].goodRides += 1;
-            msg.sender.transfer(owedToClient);
             clientMapping[msg.sender].returned += owedToClient;
+            msg.sender.transfer(owedToClient);
             emit LogReturnedFunds(msg.sender, clientMapping[msg.sender].returned);                
             bikeMapping[bikeId].state = BikeState.AVAILABLE;
             emit BikeAvailable(bikeId);
@@ -415,6 +415,6 @@ contract BikeSharing {
         Bike memory bike = bikeMapping[bikeId];
         return (bike.lastRenter, bike.condition, bike.currentlyInUse, bike.usageTime, bike.state);
     }
-    
+
     
 }

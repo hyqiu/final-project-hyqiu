@@ -20,6 +20,8 @@ class App extends Component {
       depositValue: 0,
       ridesCount: 0,
       goodRidesCount: 0,
+      bikeId: 0,
+      bikeCondition: true, 
 
       // Insurance
       insuranceClientsList : [],
@@ -51,10 +53,9 @@ class App extends Component {
   handleRegularizePayments
   handleUnderwriting
   handleSurrenderTokens
-  handle
+  handleRentBike
+  handleSurrenderBike
   */
-
-
 
   componentDidMount = async () => {
     try {
@@ -77,9 +78,15 @@ class App extends Component {
         insurance_deployedNetwork && insurance_deployedNetwork.address,
       );
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      // Set a state !
+      this.setState({
+        web3, 
+        accounts,
+        bikeContract: bikeInstance,
+        insuranceContract: insuranceInstance,
+        activeAccount: accounts[0],
+      });
+      
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -101,6 +108,43 @@ class App extends Component {
     // Update state with the result.
     this.setState({ storageValue: response });
   };
+
+  /*
+  handleAccountChange : OK
+  handleRegularizePayments
+  handleUnderwriting
+  handleSurrenderTokens
+  handleRentBike : OK partiel
+  handleSurrenderBike : OK partiel
+  */
+
+// Event for renting the bike
+  handleRentBike = async (event) => {
+    event.preventDefault();
+    await this.handleAccountChange();
+    const {accounts, bikeContract, bikeId, depositValue}  = this.state;
+    const rentBike = bikeContract.methods.rentBike(bikeId);
+    await rentBike.send({from: accounts[0], value: depositValue})
+    .once('receipt', (receipt) => {
+      console.log(receipt);
+    })
+    .on('error', console.error);
+  };
+
+// Event for surrendering the bike
+  handleSurrenderBike = async (event) => {
+    event.preventDefault();
+    await this.handleAccountChange();
+    const {accounts, bikeContract, bikeId, bikeCondition}  = this.state;
+    const surrenderBike = bikeContract.methods.surrenderBike(bikeId, bikeCondition);
+    await surrenderBike.send({from: accounts[0]})
+    .once('receipt', (receipt) => {
+      console.log(receipt);
+    })
+    .on('error', console.error);
+  };
+
+// What can we really do on the user interface side ?! --> please do the render side !!
 
   render() {
     if (!this.state.web3) {

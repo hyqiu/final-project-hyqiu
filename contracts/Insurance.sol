@@ -20,11 +20,11 @@ contract Insurance {
     uint256 retentionAmount;
     
     // InsuredList for count
-    address[] insuredList;
+    address[] public insuredList;
 
     // Storage
     mapping(address => bool) isClientInsured;
-    mapping(address => InsuranceClient) insuranceMapping;
+    mapping(address => InsuranceClient) public insuranceMapping;
 
     struct InsuranceClient {
         uint256 insuredListPointer;
@@ -142,6 +142,24 @@ contract Insurance {
     ================================================================
     */
 
+    function isInsured(address clientAdr) 
+        public 
+        view 
+        returns (bool isIndeed)
+    {
+        return isClientInsured[clientAdr] == true;
+    }
+
+    function insuredClientsCount()
+        public
+        view
+        returns (uint256 myCount)
+    {
+        return insuredList.length;
+    }
+
+    event InsuranceClientCreated(address indexed insAdr);
+
     ///@dev Public function to underwrite insurance for a client
     function underwriteInsurance()
         external
@@ -168,6 +186,7 @@ contract Insurance {
 
         // Finally, include client in the mapping
         isClientInsured[msg.sender] = true;
+        emit InsuranceClientCreated(msg.sender);
 
         return isClientInsured[msg.sender];
     }
@@ -218,9 +237,9 @@ contract Insurance {
             uint256 paybackAmount = pendingBadRides.mul(getClaimAmount(bikeSharing.getBikeValue(), retentionAmount));
             // Actualiser le payback
             if (paybackAmount != 0) {
+                updatePayback(paybackAmount, pendingBadRides);
                 msg.sender.call.value(paybackAmount);
                 emit ClaimsRepaid(pendingBadRides, paybackAmount);
-                updatePayback(paybackAmount, pendingBadRides);
             }
         }
 
@@ -430,6 +449,5 @@ contract Insurance {
     {
         return PREMIUM_RATE;
     }
-
 
 }
