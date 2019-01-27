@@ -18,6 +18,7 @@ contract BikeSharing is Ownable {
     address bikeAdmin;
     uint256 requiredDeposit;
     uint256 fee;
+    bool internal stopSwitch;
 
     // Mappings
     mapping(address => Client) public clientMapping;
@@ -36,7 +37,7 @@ contract BikeSharing is Ownable {
     */ 
 
     enum BikeState {DEACTIVATED, AVAILABLE, IN_USE}
-    enum ClientState {BANNED, GOOD_TO_GO, IN_RIDE}
+    enum ClientState {GOOD_TO_GO, IN_RIDE}
 
     struct Bike {
         address lastRenter;
@@ -65,11 +66,6 @@ contract BikeSharing is Ownable {
 
     modifier adminOnly() {
         require(msg.sender == bikeAdmin);
-        _;
-    }
-
-    modifier adminExcluded() {
-        require(msg.sender != bikeAdmin);
         _;
     }
 
@@ -103,33 +99,39 @@ contract BikeSharing is Ownable {
         _;
     }
 
+    modifier emergencyStop() {
+        require(!stopSwitch);
+        _;
+    }
+
     /*
     ================================================================
                             Events
     ================================================================
     */ 
 
-    event LogBikeRent(uint256 bikeId, address renter, bool status);
-    event LogReceivedFunds(address sender, uint256 amount);
-    event LogReturnedFunds(address recipient, uint256 amount);
+    event LogBikeRent(uint256 bikeId, address indexed renter, bool status);
+    event LogReceivedFunds(address indexed sender, uint256 amount);
+    event LogReturnedFunds(address indexed recipient, uint256 amount);
 
     // Fallback event
     event Deposit(address indexed sender, uint256 value);
 
     // Client creation
-    event ClientCreated(address clientAddress);
+    event ClientCreated(address indexed clientAddress);
 
     // Change of state events
     event BikeAvailable(uint256 bikeId);
-    event ClientGoodToGo(address clientAddress);
+    event ClientGoodToGo(address indexed clientAddress);
 
     event BikeInRide(uint256 bikeId);
-    event ClientInRide(address clientAddress);
+    event ClientInRide(address indexed clientAddress);
 
     event BikeDeactivated(uint256 bikeId);
 
     event BikeInitiated(uint256 bikeId);
-    //event CleanSlate(address clientAdr);
+
+    event StopSwitchChanged(bool currentStatus);
 
     /*
     ================================================================
@@ -138,7 +140,7 @@ contract BikeSharing is Ownable {
     */ 
 
     /// @dev Contract constructor sets the bike Admin address, the fee (by minute) and the necessary deposit
-    constructor() public {
+    constructor() public Ownable() {
         bikeAdmin = msg.sender;
         requiredDeposit = BIKE_VALUE;
         fee = RENT_FEE;
@@ -221,10 +223,10 @@ contract BikeSharing is Ownable {
     /// @param bikeId the client must input the bike id
     /// @return Did it succeed ? How many rides did the client make ? 
     function rentBike(uint256 bikeId) 
-        public 
+        external 
         payable
-        validParametersBike(bikeId) 
-        adminExcluded
+        validParametersBike(bikeId)
+        emergencyStop
         returns (bool success) 
     {
 
@@ -263,7 +265,7 @@ contract BikeSharing is Ownable {
 
             clientMapping[msg.sender] = Client(
                 {
-                    clientListPointer: 0,
+                    clientListPointer: clientList.push(msg.sender) - 1,
                     state: ClientState.GOOD_TO_GO,
                     received: 0,
                     returned: 0,
@@ -271,8 +273,6 @@ contract BikeSharing is Ownable {
                     goodRides: 0
                 }
             );
-
-            clientMapping[msg.sender].clientListPointer = clientList.push(msg.sender) - 1;
 
             // Finally, the guy is made a client
             isBikeClient[msg.sender] = true;
@@ -310,13 +310,13 @@ contract BikeSharing is Ownable {
     /// @param bikeId The client must input the bike id 
     /// @return Did it succeed ? 
     function surrenderBike(uint256 bikeId, bool newCondition) 
-        public 
+        external 
         bikeClientOnly(msg.sender)
         validParametersBike(bikeId)
         bikeInRide(bikeId)
         clientInRide(msg.sender)
         bikeUser(bikeId, msg.sender)
-        adminExcluded
+        emergencyStop
         returns (bool success)
     {
         uint256 feeCharged = calculateFee(now.sub(bikeMapping[bikeId].usageTime));
@@ -360,6 +360,28 @@ contract BikeSharing is Ownable {
         }
     }
     
+    /* 
+    ================================================================
+                            Emergency switch
+    ================================================================
+    */
+
+    function emergencySwitch()
+        external
+        onlyOwner()
+        returns (bool alarmOn)
+    {
+        if (stopSwitch == false) {
+            stopSwitch = true;
+        } else {
+            stopSwitch = false;
+        }
+        
+        emit StopSwitchChanged(stopSwitch);
+        
+        return stopSwitch;
+    }
+
     /* 
     ================================================================
                             Getter functions

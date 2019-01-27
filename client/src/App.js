@@ -13,9 +13,11 @@ class App extends Component {
       storageValue: 0, web3: null, accounts: null,
       accountNumber: 0,
       activeAccount: '',
+      activeAccountBalance: 0,
       defaultIntInput: 0,
       
       // Bike
+      bikeContractRunning: true,
       depositValue: 0,
       ridesCount: 0,
       goodRidesCount: 0,
@@ -84,6 +86,12 @@ class App extends Component {
         insuranceAddress: insuranceAddress,
         activeAccount: accounts[0],
       });
+
+      // Get my balance
+      const userBalance = await web3.eth.getBalance(this.state.activeAccount);
+      this.setState({
+        activeAccountBalance: userBalance,
+      })
 
       // Set constants
       const setDeposit = bikeInstance.methods.getBikeValue();
@@ -268,7 +276,7 @@ class App extends Component {
         <div className="py-3">
           {/*See current account*/} 
           <p className="font-weight-bold">Current User: {this.state.activeAccount}</p>
-          {/*Insert the Circuit Break Button here !!*/}    
+          <p className="font-weight-bold">User Balance : {this.state.activeAccountBalance}</p>
         </div>
 
           {/*Check your balance

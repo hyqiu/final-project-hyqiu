@@ -143,7 +143,5 @@ contract('BikeSharing', function(accounts) {
 
 	});
 
-	// A banned client cannot rent a bike any more. 
-
 	
 })
