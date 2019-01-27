@@ -9,7 +9,7 @@
     "web3": "^1.0.0-beta.37"
   },
   "scripts": {
-    "start": "set PORT=8545 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

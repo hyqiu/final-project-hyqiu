@@ -181,8 +181,6 @@ class App extends Component {
 
 // Handle radio button calls
   radioHandler = (event) => {
-    console.log(this.state.bikeCondition);
-    console.log(this.state.goodRidesCount);
     if(event.target.value === "BadCondition"){
       this.setState({
         bikeCondition: false
@@ -195,8 +193,6 @@ class App extends Component {
         goodRidesCount: goodRidesCount + 1
       })      
     }
-    console.log(this.state.bikeCondition);
-    console.log(this.state.goodRidesCount);
   };
 
   handleIntInput = (event) => {
@@ -353,6 +349,7 @@ class App extends Component {
                 <input 
                   type="radio" 
                   className="form-control radio" 
+                  name="radio-condition"
                   value="BadCondition"
                   defaultChecked
                   onChange={this.radioHandler}
@@ -362,6 +359,7 @@ class App extends Component {
                 <input 
                   type="radio" 
                   className="form-control radio" 
+                  name="radio-condition"
                   value="GoodCondition" 
                   onChange={this.radioHandler}
                 />
