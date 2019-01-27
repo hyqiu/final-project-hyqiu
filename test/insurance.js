@@ -41,7 +41,7 @@ contract('Insurance', function(accounts) {
 		await bikeShop.surrenderBike(myBikeId, true, {from: myUser});
 
 		// The payments must be regularized
-		pendingPremia = await insuranceCompany.getPendingPremia({from: myUser});
+		pendingPremia = await insuranceCompany.getPendingPremia(myUser, {from: myUser});
 		await insuranceCompany.regularizePayments({from: myUser, value: pendingPremia});
 
 		result = await insuranceCompany.viewInsuranceStatus(myUser);
@@ -65,7 +65,7 @@ contract('Insurance', function(accounts) {
 		assert.isAtMost(parseInt(userBalanceBeforePayback), 
 			parseInt(userBalanceBeforeRide - deposit), 'Too big balance before payback');
 
-		pendingPremia = await insuranceCompany.getPendingPremia({from: myUser});
+		pendingPremia = await insuranceCompany.getPendingPremia(myUser, {from: myUser});
 		await insuranceCompany.regularizePayments({from: myUser, value: pendingPremia});
 		const userBalanceAfter = await web3.eth.getBalance(myUser);
 		assert.isAtMost(parseInt(userBalanceAfter), 
@@ -88,7 +88,7 @@ contract('Insurance', function(accounts) {
 			await bikeShop.surrenderBike(myBikeId2, true, {from: myUser});
 		}
 
-		pendingPremia = await insuranceCompany.getPendingPremia({from: myUser});
+		pendingPremia = await insuranceCompany.getPendingPremia(myUser, {from: myUser});
 		await insuranceCompany.regularizePayments({from: myUser, value: pendingPremia});
 		
 		result = await insuranceCompany.viewInsuranceStatus(myUser);

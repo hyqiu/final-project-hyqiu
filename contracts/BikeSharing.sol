@@ -1,8 +1,9 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract BikeSharing {
+contract BikeSharing is Ownable {
 
     using SafeMath for uint256;
 
@@ -26,7 +27,7 @@ contract BikeSharing {
 
     // ClientLists for count
 
-    address[] public clientList;
+    address[] clientList;
 
     /*
     ================================================================
@@ -101,7 +102,6 @@ contract BikeSharing {
         require(clientMapping[clientAdr].state == ClientState.IN_RIDE);
         _;
     }
-
 
     /*
     ================================================================
@@ -395,10 +395,10 @@ contract BikeSharing {
     
     function getBikeValue()
         public
-        pure
+        view
         returns (uint256 bikeValue)
     {
-        return BIKE_VALUE;
+        return requiredDeposit;
     }
 
    function checkBikeStatus (uint256 bikeId)

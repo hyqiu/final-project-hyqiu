@@ -122,7 +122,6 @@ class App extends Component {
     }
   };
 
-
 // Event for renting the bike
   handleRentBike = async (event) => {
     event.preventDefault();
@@ -202,7 +201,7 @@ class App extends Component {
     await this.handleAccountChange();
     const {accounts, insuranceContract} = this.state;
 
-    const pendingPayments = insuranceContract.methods.getPendingPremia();
+    const pendingPayments = insuranceContract.methods.getPendingPremia(accounts[0]);
     await pendingPayments.call({from: accounts[0]})
     .then((receipt) => {
       console.log(receipt);
