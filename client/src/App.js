@@ -13,6 +13,7 @@ class App extends Component {
       storageValue: 0, web3: null, accounts: null,
       accountNumber: 0,
       activeAccount: '',
+      defaultIntInput: 0,
       
       // Bike
       depositValue: 0,
@@ -121,14 +122,6 @@ class App extends Component {
     }
   };
 
-  /*
-  handleAccountChange : OK
-  handleRegularizePayments
-  handleUnderwriting
-  handleSurrenderTokens
-  handleRentBike : OK partiel
-  handleSurrenderBike : OK partiel
-  */
 
 // Event for renting the bike
   handleRentBike = async (event) => {
@@ -167,7 +160,7 @@ class App extends Component {
     .on('error', console.error);
   };
 
-  handleUnderwriting = async(event) => {
+  handleUnderwriting = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
     const {accounts, insuranceContract, premiumRate} = this.state;
@@ -178,8 +171,6 @@ class App extends Component {
     })
     .on('error', console.error);
   };
-
-}
 
 // Handle radio button calls
   radioHandler = (event) => {
@@ -199,9 +190,14 @@ class App extends Component {
     }
     console.log(this.state.bikeCondition);
     console.log(this.state.goodRidesCount);
-  }
+  };
 
-  handleRegularizePayments = async(event) => {
+  handleIntInput = (event) {
+    const intInput = (event.target.validity.valid) ? event.target.value : this.state.defaultIntInput;
+    this.setState({ defaultIntInput: intInput });
+  };
+
+  handleRegularizePayments = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
     const {accounts, insuranceContract} = this.state;
@@ -230,7 +226,7 @@ class App extends Component {
     });
   };
 
-  handleRedeemTokens = async(event) => {
+  handleRedeemTokens = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
     const {accounts, insuranceContract, ratioClaimToken, tokensOwned, tokensRedeemed, countClaims} = this.state;
@@ -292,10 +288,9 @@ class App extends Component {
             3) You were paid back
           */}
 
-    {/*First display the bike store, with 2 buttons : rent and return bike*/}    
+          {/*First display the bike store, with 2 buttons : rent and return bike*/}    
       <div>
-        <h2 className="font-weight-bold py-2"> BIKE STORE </h2>
-          
+        <h2 className="font-weight-bold py-2"> BIKE STORE </h2>          
           <h4 className="font-weight-normal">Rent Bike</h4> {/*Bike Rental*/}
 
           <form onSubmit={this.handleRentBike}> {/*In this form, you only need to input the bike ID*/}
@@ -310,27 +305,18 @@ class App extends Component {
                   pattern="[0-9]*"
                   className="form-control form-control-sm" 
                   id="bikeId_in"
-                  onInput={this.handleIdInput.bind(this)}
+                  onInput={this.handleIntInput.bind(this)}
                   onChange = {this.inputChangeHandler}
                 />
               </div>
               <div className="col"></div>
             </div>
-
-{/*         
-  TODO : delete ? 
-            <div>
-              <input className="btn btn-outline-secondary btn-sm" type="submit" value="Rent Bike"/>
-            </div>
-*/}
             <button type="submit">Rent Bike</button>
-            <p>You rented bike no. {this.state.bikeId_in} </p>
-            <p>You paid a deposit of {this.state.depositValue}</p>
-
           </form>
+          <p>You rented bike no. {this.state.bikeId_in} </p>
+          <p>You paid a deposit of {this.state.depositValue}</p>
 
           <h4 className="font-weight-normal">Surrender Bike</h4> {/*Bike Surrendering*/}
-
           <form onSubmit={this.handleSurrenderBike}>
             
             <div className="form-row"> {/*The bike ID*/}
@@ -344,7 +330,7 @@ class App extends Component {
                   pattern="[0-9]*"
                   className="form-control form-control-sm" 
                   id="bikeId_out"
-                  onInput={this.handleIdInput.bind(this)}
+                  onInput={this.handleIntInput.bind(this)}
                   onChange={this.inputChangeHandler}
                 />
               </div>
@@ -376,18 +362,11 @@ class App extends Component {
               </div>
               <div className="col"></div>
             </div>
-
-{/*
-            <div>
-              <input className="btn btn-outline-secondary btn-sm" type="submit" value="Return Bike" />
-            </div>
-*/}
             <button type="submit">Return Bike</button>
           </form>
           <p>You returned bike no. {this.state.bikeId_out} </p>
           <p>The bike is in good state: {this.state.bikeCondition}</p>
           <p>You were paid back {this.state.returnedAmount}</p>
-
 
       </div> {/*Bike store ends*/}
 
@@ -441,7 +420,7 @@ class App extends Component {
                     pattern="[0-9]*"
                     className="form-control form-control-sm" 
                     id="tokensRedeemed"
-                    onInput={this.handleIdInput.bind(this)}
+                    onInput={this.handleIntInput.bind(this)}
                     onChange={this.inputChangeHandler}
                   />
                 </div>
@@ -456,12 +435,11 @@ class App extends Component {
 
       </div> {/*Insurance corner ends*/}
 
-
     );
   }
 }
 
-export default App;  
+export default App;
 
 
   
