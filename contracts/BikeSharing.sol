@@ -48,7 +48,7 @@ contract BikeSharing {
     struct Client {
         uint256 clientListPointer;
         ClientState state;
-        // For 1 ride, how much received and returned
+        // For the last ride, how much received and returned
         uint256 received;
         uint256 returned;
         // Count of number of rides, number of good rides
@@ -281,6 +281,9 @@ contract BikeSharing {
         } else {
             // The client must not be already using a scooter
             require(clientMapping[msg.sender].state == ClientState.GOOD_TO_GO);
+            // Reset the count for how much the user received and returned
+            clientMapping[msg.sender].received = 0;
+            clientMapping[msg.sender].returned = 0;
         }
 
         // Accounting
@@ -317,7 +320,7 @@ contract BikeSharing {
         returns (bool success)
     {
         uint256 feeCharged = calculateFee(now.sub(bikeMapping[bikeId].usageTime));
-        uint256 owedToClient = requiredDeposit.sub(feeCharged);
+        uint256 owedToClient = clientMapping[msg.sender].received.sub(feeCharged);
 
         if (newCondition == false) {
             owedToClient = 0;

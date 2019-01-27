@@ -77,8 +77,6 @@ contract('Insurance', function(accounts) {
 
 	});
 
-	// BeforePayback - premium + payback = afterpayback
-
 	it("should allow user to redeem tokens against claim counts", async () => {
 
 		result = await insuranceCompany.viewInsuranceStatus(myUser);

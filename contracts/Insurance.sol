@@ -400,6 +400,19 @@ contract Insurance {
     // Regularize with number of tokens
     // Check : nbTokens = nbGoodRides
     
+    function tokenAccounting(uint256 nbTokens)
+        internal
+        pure
+        returns (uint256 claimsToDecrease, uint256 exchangedTokens)
+    {
+        claimsToDecrease = nbTokens.div(CLAIM_TOKEN_RATIO);
+        uint256 surplus = nbTokens.mod(CLAIM_TOKEN_RATIO);
+        exchangedTokens = nbTokens.sub(surplus);
+
+        return (claimsToDecrease, exchangedTokens);
+    }
+
+
     // The insuree has the option to exchange tokens against a reduction of claims
     function tokenClaimReducer(uint256 nbTokens)
         external
@@ -410,11 +423,9 @@ contract Insurance {
         InsuranceClient storage insured = insuranceMapping[msg.sender];
         require(insured.nbTokensOwned >= nbTokens);
         require(nbTokens >= CLAIM_TOKEN_RATIO);
-        
-        uint256 claimsToDecrease = nbTokens.div(CLAIM_TOKEN_RATIO);
-        uint256 surplus = nbTokens.mod(CLAIM_TOKEN_RATIO);
-        uint256 exchangedTokens = nbTokens.sub(surplus);
-    
+        require(insured.netClaims > 0);
+
+        (uint256 claimsToDecrease, uint256 exchangedTokens) = tokenAccounting(nbTokens);
         // Burn tokens 
         behaviourToken.burn(msg.sender, exchangedTokens);
         // Keep accounting
@@ -448,6 +459,14 @@ contract Insurance {
         returns (uint256 rate)
     {
         return PREMIUM_RATE;
+    }
+
+    function getClaimTokenRatio()
+        external
+        pure
+        returns (uint256 rate)
+    {
+        return CLAIM_TOKEN_RATIO;
     }
 
 }
