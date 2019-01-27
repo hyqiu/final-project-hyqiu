@@ -38,6 +38,7 @@ contract Insurance is Ownable {
     mapping(address => bool) isClientInsured; // Mapping to keep track of a client's insurance status
     mapping(address => InsuranceClient) insuranceMapping; // Mapping to a client's insurance data
 
+    // Insurance client data struct
     struct InsuranceClient {
         uint256 insuredListPointer;     // Number of client in list
         uint256 totalPremiumPaid;       // Total of the premia paid by insurer
@@ -60,26 +61,49 @@ contract Insurance is Ownable {
     ================================================================
     */
 
+    /// @dev Is the bike shop contract correctly referred to ? 
+    /// @param bikeShopAddress The address of the BikeShop contract
     event BikeShopLinked(address indexed bikeShopAddress);
+    /// @dev Is the token contract correctly deployed ? 
+    /// @param newTokenAddress The address of the deployed token contract
     event TokenCreated(address indexed newTokenAddress);
-    
+    /// @dev A new insurance client should be created
+    /// @param insAdr The account address of the new client
     event InsuranceClientCreated(address indexed insAdr);    
     
-    event TotalPaybackAmountUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How many new rides did the user make ?
+    /// @param client The client's address
+    /// @param newValue The new ride count of the client
+    /// @param byHowMuch The variation from old value (newValue - byHowMuch = oldValue)
     event RidesCountUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+
+    /// @dev How much is the total payback amount ? 
+    event TotalPaybackAmountUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How much is the claims count ? 
     event ClaimsUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How much is the net claims count ? 
     event NetClaimsUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How much is the total premium amount paid by the user ?
     event PremiumAmountUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How much is the payback count after update ?
     event TotalPaybacksUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How many claims have been repaid ? 
     event ClaimsRepaid(uint256 count, uint256 totalAmount);
+    /// @dev How many tokens has the client earned so far ? 
     event TokenUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
+    /// @dev How many tokens does the client have ? 
     event OwnedTokenUpdate(address indexed client, uint256 newValue, uint256 byHowMuch);
 
+    /// @dev Approval for a rider for an amount of tokens
     event TokenApproved(address indexed _riderAddress, uint256 _rewardAmount);
+    /// @dev The amount of tokens due was paid
     event TokenPaid(address indexed insuredAddress, uint256 amount);
+    /// @dev The how many tokens redeemed how many claims
     event TokensClaimExchange (address indexed from, uint256 nbTokens, uint256 claimsInvolved);
     
+    /// @dev Deposit occurred
     event Deposit(address indexed sender, uint256 value);
+    /// @dev The switch changed
     event StopSwitchChanged(bool currentStatus);
 
     /*
@@ -88,16 +112,21 @@ contract Insurance is Ownable {
     ================================================================
     */
 
+    /// @dev Is the client insured ? 
+    /// @param _address The client's address
     modifier insuredClient (address _address) {
         require(isClientInsured[_address] == true);
         _;
     }
 
+    /// @dev Is the function's input non-nil ?
+    /// @param _input The function's argument that is tested
     modifier positiveInput (uint256 _input) {
         require(_input > 0);
         _;
     }
     
+    /// @dev Emergency switch to prevent a function from executing
     modifier emergencyStop() {
         require(!stopSwitch);
         _;
@@ -194,15 +223,14 @@ contract Insurance is Ownable {
         updateRides(msg.sender);                                  // The rides count must be updated
         updatePremiumPaid(pendingPremia, msg.sender);             // The premium count must be updated
 
-        // How many new claims ? 
-        uint256 pendingBadRides = getPendingBadRides(msg.sender);
+        uint256 pendingBadRides = getPendingBadRides(msg.sender); // Get count of new claims
         require(pendingBadRides <= newRides);
 
         if (pendingBadRides != 0) {
-            // Actualiser le nombre de claims
+            // The claims count is updated
             updateClaims(pendingBadRides, msg.sender);
             uint256 paybackAmount = pendingBadRides.mul(getClaimAmount(bikeSharing.getBikeValue(), retentionAmount));
-            // Actualiser le payback
+            // The payback is updated if it is non-nil
             if (paybackAmount != 0) {
                 updatePayback(paybackAmount, pendingBadRides, msg.sender);
                 msg.sender.call.value(paybackAmount);
@@ -349,6 +377,23 @@ contract Insurance is Ownable {
         return (tokenEligibleRides.sub(insured.grossTokens)).mul(tokenRewardFactor);
     }
 
+    /// @dev A number of tokens is being evaluated to define how many claims it can decrease
+    /// @param nbTokens The number of tokens one wishes to redeem
+    /// @return claimsToDecrease The claims that can be decreased with nbTokens
+    /// @return exchangedTokens The tokens that will be exchanged to decrease the claims.
+    function tokenAccounting(uint256 nbTokens)
+        internal
+        view
+        positiveInput(nbTokens)
+        returns (uint256 claimsToDecrease, uint256 exchangedTokens)
+    {
+        claimsToDecrease = nbTokens.div(claimTokenRatio);
+        uint256 surplus = nbTokens.mod(claimTokenRatio);
+        exchangedTokens = nbTokens.sub(surplus);
+
+        return (claimsToDecrease, exchangedTokens);
+    }
+
     /// @dev Get the data history that insurer has on a client
     /// @param insuredAddress The address of the user
     /// @return insuredListPointer The rank in terms of subscription of a client
@@ -379,6 +424,10 @@ contract Insurance is Ownable {
     ================================================================
     */
 
+    /// @dev The payback data in client's struct is updated
+    /// @param paybackAmount The amount that is paid back to the user
+    /// @param pendingBadRides The bad rides that are accounted for, that have to be paid back
+    /// @param insuredAddress The client's address
     function updatePayback (uint256 paybackAmount, uint256 pendingBadRides, address insuredAddress)
         internal
         positiveInput(paybackAmount)
@@ -391,6 +440,8 @@ contract Insurance is Ownable {
         emit TotalPaybackAmountUpdate(insuredAddress, insured.paybackAmount, paybackAmount);        
     }
 
+    /// @dev The number of rides of a client is updated
+    /// @param insuredAddress The client's address
     function updateRides (address insuredAddress)
         internal
     {
@@ -400,6 +451,10 @@ contract Insurance is Ownable {
         emit RidesCountUpdate(insuredAddress, insured.totalRides, newRides);
     }
 
+
+    /// @dev The total premium paid by user is updated
+    /// @param premiumAmount The amount that is paid back to the user
+    /// @param insuredAddress The client's address
     function updatePremiumPaid (uint256 premiumAmount, address insuredAddress)
         internal
         positiveInput(premiumAmount)
@@ -409,7 +464,9 @@ contract Insurance is Ownable {
         emit PremiumAmountUpdate(insuredAddress, insured.totalPremiumPaid, premiumAmount);
     }
 
-    // @dev : reconcile number of claims
+    /// @dev The claims data is reconciled with the number of bad rides read from BikeShop contract
+    /// @param pendingBadRides The bad rides that are accounted for, that have to be paid back
+    /// @param insuredAddress The client's address
     function updateClaims (uint256 pendingBadRides, address insuredAddress) 
         internal
         positiveInput(pendingBadRides)
@@ -421,7 +478,9 @@ contract Insurance is Ownable {
         emit NetClaimsUpdate(insuredAddress, insured.netClaims, pendingBadRides);
     }
 
-    // @dev : update token count
+    /// @dev The count of tokens gained by the user is updated
+    /// @param pendingTokens The tokens that are owed to the client
+    /// @param insuredAddress The client's address
     function updateTokenCount (uint256 pendingTokens, address insuredAddress)
         internal
         positiveInput(pendingTokens)
@@ -431,22 +490,6 @@ contract Insurance is Ownable {
         emit TokenUpdate(insuredAddress, insured.grossTokens, pendingTokens);
         insured.nbTokensOwned += pendingTokens;
         emit TokenUpdate(insuredAddress, insured.nbTokensOwned, pendingTokens);
-    }
-
-    // Regularize with number of tokens
-    // Check : nbTokens = nbGoodRides
-    
-    function tokenAccounting(uint256 nbTokens)
-        internal
-        view
-        positiveInput(nbTokens)
-        returns (uint256 claimsToDecrease, uint256 exchangedTokens)
-    {
-        claimsToDecrease = nbTokens.div(claimTokenRatio);
-        uint256 surplus = nbTokens.mod(claimTokenRatio);
-        exchangedTokens = nbTokens.sub(surplus);
-
-        return (claimsToDecrease, exchangedTokens);
     }
       
     /* 
@@ -507,6 +550,8 @@ contract Insurance is Ownable {
     ================================================================
     */
 
+   /** @dev Fallback function to allow only the owner of the Insurance contract to deposit value 
+    */ 
     function ()
         external
         payable
@@ -522,6 +567,10 @@ contract Insurance is Ownable {
                             Emergency switch
     ================================================================
     */
+
+   /** @dev Emergency switch
+    * @return alarmOn A boolean that blocks function execution if true.
+    */ 
 
     function emergencySwitch()
         external
