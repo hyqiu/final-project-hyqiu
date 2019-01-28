@@ -324,20 +324,21 @@ contract BikeSharing is Ownable {
             owedToClient = 0;
             bikeMapping[bikeId].state = BikeState.DEACTIVATED;
             emit BikeDeactivated(bikeId);
+            clientMapping[msg.sender].state = ClientState.GOOD_TO_GO;
+            emit ClientGoodToGo(msg.sender);
         } else {
             clientMapping[msg.sender].goodRides += 1;
             clientMapping[msg.sender].returned += owedToClient;
+            clientMapping[msg.sender].state = ClientState.GOOD_TO_GO;
+            emit ClientGoodToGo(msg.sender);
             msg.sender.transfer(owedToClient);
             emit LogReturnedFunds(msg.sender, clientMapping[msg.sender].returned);                
             bikeMapping[bikeId].state = BikeState.AVAILABLE;
             emit BikeAvailable(bikeId);
         }
-
         // Make the client good to go and the bike not in use
         bikeMapping[bikeId].currentlyInUse = false;
-        clientMapping[msg.sender].state = ClientState.GOOD_TO_GO;
-        emit ClientGoodToGo(msg.sender);
-
+        
         return true;
     }
 
