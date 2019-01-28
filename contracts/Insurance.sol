@@ -297,6 +297,9 @@ contract Insurance is Ownable {
     ================================================================
     */
 
+    /// @dev Ignores the previous rides that were done when the client was not insured
+    /// @param insuranceTaker The insured's address
+    /// @return insuredTotalRides The insurance Taker's total rides
     function tareRidesCount (address insuranceTaker)
         internal
         view
@@ -308,6 +311,9 @@ contract Insurance is Ownable {
         return insuredTotalRides;
     }
 
+    /// @dev Ignores the previous good rides that were done when the client was not insured
+    /// @param insuranceTaker The insured's address
+    /// @return insuredGoodRides The insurance Taker's good rides
     function tareGoodRidesCount (address insuranceTaker)
         internal
         view
