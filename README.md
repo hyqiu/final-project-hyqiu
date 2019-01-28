@@ -1,5 +1,7 @@
 # final-project-hyqiu
 
+This is the submission repo for the Consensys Academy Developer's Program 2019.
+
 # Project Documentation
 
 * Project description : https://docs.google.com/document/d/1zwJ7NHm3kzYCB-VVPoxrDVtCFVXr2wuTwtEQvOV5g7c/edit?usp=sharing
@@ -16,7 +18,6 @@
 ## Local Run
 
 ### Setup 
-
 * Clone the repository and initialize npm, 
 ```bash
 npm install
@@ -32,6 +33,7 @@ ganache-cli -m "your mnemonic"
 ```
 
 ### Unit testing
+The unit tests are located in the `test` folder. 
 * Go to project root and migrate with truffle
 ```bash
 truffle migrate --reset --all
@@ -42,17 +44,19 @@ truffle test
 ```
 
 ### dApp
+
 * Go to `client` folder and run 
 ```bash
 npm run start
 ```
-* Follow the instructions in the documentation
+* Follow the instructions in the documentation (dApp functioning process)
 
 
 ## Used libraries
-
 * "openzeppelin-solidity": "2.1.2"
 
-## Files of interest
+## Files of interest 
 
-
+* `deployed_addresses.txt`: File listing the deployed contracts on Rinkeby testnet (id: 4) that can be on https://rinkeby.etherscan.io/
+* `avoiding_common_attacks.md`: File listing 4 risks associated to the contracts as deployed.
+* `design_patterns.md`: File listing the design patterns involved in the project
