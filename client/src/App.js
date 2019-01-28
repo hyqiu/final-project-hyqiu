@@ -128,10 +128,18 @@ class App extends Component {
       await checkInsuredStatus.call({from: accounts[0]})
       .then((receipt) => {
         this.setState({
-          insuredRides: parseInt(receipt[2]),
-          tokensOwned: parseInt(receipt[6]),
+          insuredRides: receipt[2],
+          tokensOwned: receipt[6],
         })
       })
+
+      const checkPendingPremia = insuranceInstance.methods.getPendingPremia(accounts[0]);
+      await checkPendingPremia.call({from: accounts[0]})
+      .then((receipt) => {
+        this.setState({
+          pendingPremia: receipt,
+        })
+      });
 
       // Set constants : Deposit / Premium rate / Claim_Token ratio
       const setDeposit = bikeInstance.methods.getBikeValue();

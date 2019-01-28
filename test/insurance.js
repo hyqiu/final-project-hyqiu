@@ -101,7 +101,4 @@ contract('Insurance', function(accounts) {
 
 	});
 
-	// TODO : write tests featuring events for minting and burning tokens
-
-
 })

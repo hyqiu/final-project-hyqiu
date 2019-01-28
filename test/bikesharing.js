@@ -140,8 +140,27 @@ contract('BikeSharing', function(accounts) {
 		returnedToUser = await bikeShop.getReturned(carefree_renter);
 		assert.equal(returnedToUser, 0, 'The carefree user was paid back');
 
+	});
+
+	it("should not allow a user currently in ride to rent another bike", async () => {
+		const bikeUID = 100;
+		await bikeShop.rentBike(bikeUID, {from: careful_renter, value: deposit});
+		try {
+			await bikeShop.rentBike(bikeUID + 1, {from: careful_renter, value: deposit})
+		} catch (e) {
+			return true;
+		}
+		throw new Error("This should not appear");
 
 	});
 
-	
+	it("should not be allowed for another rider to try to rent a bike that is already in use", async () => {
+		try {
+			await bikeShop.rentBike(bikeUID, {from: careless_renter, value: deposit});
+		} catch (e) {
+			return true;
+		}
+		throw new Error("This should not appear");
+	})
+
 })
