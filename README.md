@@ -2,8 +2,8 @@
 
 ## Project Documentation
 
-* Project description : 
-* dApp functioning process : 
+* Project description : https://docs.google.com/document/d/1zwJ7NHm3kzYCB-VVPoxrDVtCFVXr2wuTwtEQvOV5g7c/edit?usp=sharing
+* dApp functioning process : https://docs.google.com/presentation/d/1Vy7sgw3CK5oGi2UX00JY4Sm9sXU_NCc8OJjHkjsT99Q/edit?usp=sharing
 
 ### Prerequisites
 
