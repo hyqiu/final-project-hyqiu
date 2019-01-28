@@ -11,6 +11,8 @@ contract('BehaviourToken', function(accounts) {
 		tokenInstance = await BehaviourToken.deployed();
 	});
 
+	// Check the event associated to mint (cf. IERC20 defined event)
+
 	it("should allow the owner to mint new tokens for user", async () => {
 		const value = 3;
 		let result = await tokenInstance.mint(user, value, {from: owner});
@@ -21,6 +23,7 @@ contract('BehaviourToken', function(accounts) {
 
 	});
 
+	// Check the event associated to burn (cf. IERC20 defined event)
 
 	it("should allow the owner to burn the user's tokens", async () => {
 		const value = 1;
@@ -31,6 +34,8 @@ contract('BehaviourToken', function(accounts) {
 		}, 'The event should showcase a transfer from the user address to a null address');
 
 	});
+
+	// Make sure the burning process is not giving "negative" tokens
 
 	it("should return an error if we want to burn more than possible", async () => {
 		const value = 3;

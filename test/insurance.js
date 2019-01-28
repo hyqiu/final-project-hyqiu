@@ -55,6 +55,8 @@ contract('Insurance', function(accounts) {
 
 	});
 
+	// Check if insurance mechanism works
+
 	it("should allow user to have insurance repayment when returning bike in bad condition", async () => {
 
 		const userBalanceBeforeRide = await web3.eth.getBalance(myUser);
@@ -78,11 +80,14 @@ contract('Insurance', function(accounts) {
 
 	});
 
+
 	it("should allow user to redeem tokens against claim counts", async () => {
 
 		result = await insuranceCompany.viewInsuranceStatus(myUser);
 		const myBikeId2 = myBikeId + 1;
 		const ridesLeft = claim_token_ratio - (result[2] - result[3]);
+
+		// Loop on rides to be made before being able to redeem
 
 		for (var ride = 0; ride < ridesLeft; ride++){
 			await bikeShop.rentBike(myBikeId2, {from: myUser, value: deposit});
@@ -101,6 +106,8 @@ contract('Insurance', function(accounts) {
 		assert.equal(result[4], 0, 'Net claims should have decreased');
 
 	});
+
+	// Check if the kill switch works
 
 	it("should not be allowed for someone else than the owner to user the switch", async () => {
 		try {

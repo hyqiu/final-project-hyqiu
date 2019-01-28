@@ -45,16 +45,13 @@ contract('BikeSharing', function(accounts) {
 
 	const deposit = web3.utils.toWei('1', 'ether');
 
+	// Access the deployed contract before each test
+
 	beforeEach('setup contract for each test', async() => {
 		bikeShop = await BikeSharing.deployed();
 	})
 
-	// 1. Mark user as enrolled
-	// 2. Make sure user is the last user of bike
-	// 3. Make user have correct count of bike uses and good rides
-	// 4. Make sure the user is returned the correct amount
-	// 5. Make sure the states are consistent
-	// 6. A banned user should not be a client anymore
+	// Check if the test_renter is enrolled after clicking the function
 
 	it("should mark bike users as enrolled", async () => {
 		idBike = 0;
@@ -63,6 +60,8 @@ contract('BikeSharing', function(accounts) {
 		assert.isTrue(userEnrolled, 'The user has not been correctly enrolled');
 		await bikeShop.surrenderBike(idBike, true, {from: test_renter});		
 	});
+
+	// Check if the bike data featured last trip's information (rider address, condition, availability)
 
 	it("should memorize last bike usage", async () => {
 
@@ -75,6 +74,8 @@ contract('BikeSharing', function(accounts) {
 		assert.equal(bikeStatus[4], 1, 'Bike status is supposed to be available');
 
 	});
+
+	// Check if the contrct can handle more than 1 user
 
 	it("should handle two or more simultaneous users", async () => {
 		idBike0 = idBike + 1;
@@ -97,6 +98,8 @@ contract('BikeSharing', function(accounts) {
 		assert.isAtLeast(parseInt(totalReceived), parseInt(2 * deposit), "Did not receive the proper amount");
 	
 	});
+
+	// Check if the elapsed time is consistent with the fee paid
 
 	it("should correctly count rides and fees for the careful user", async () => {
 		
@@ -123,6 +126,8 @@ contract('BikeSharing', function(accounts) {
 
 	});
 
+	// Check if the accounting is correct for the care-free user (who won't be reimbursed)
+
 	it("should correctly count rides and fees for the carefree user", async () => {
 
 		// Surrender bike
@@ -142,6 +147,8 @@ contract('BikeSharing', function(accounts) {
 
 	});
 
+	// Check if the modifiers based on enums for bikes work
+
 	it("should not allow a user currently in ride to rent another bike", async () => {
 		const bikeUID = 100;
 		await bikeShop.rentBike(bikeUID, {from: careful_renter, value: deposit});
@@ -154,6 +161,8 @@ contract('BikeSharing', function(accounts) {
 
 	});
 
+	// Check if the modifiers based on enums for clients work
+	
 	it("should not be allowed for another rider to try to rent a bike that is already in use", async () => {
 		try {
 			await bikeShop.rentBike(bikeUID, {from: careless_renter, value: deposit});
