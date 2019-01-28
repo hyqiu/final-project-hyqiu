@@ -19,16 +19,23 @@ class App extends Component {
       // Bike
       bikeContractRunning: true,
       depositValue: 0,
+      bikeCondition: true, 
+      returnedAmount: 0,
+
+      // Bike user
+      inRide: 0,
       ridesCount: 0,
       goodRidesCount: 0,
-      bikeId_in: 0,
-      bikeId_out: 0,
-      bikeCondition: true, 
+      currentBikeId:'',
+      lastBikeId: '',
+      ridesCompleted: 0,
 
       // Insurance
+      boughtInsurance: false,
       premiumRate : 0,
       pendingPremia: 0,
       countClaims: 0,
+      insuredRides: 0,
       
       // Tokens
       tokenName: 'BehaviourToken',
@@ -93,11 +100,33 @@ class App extends Component {
         activeAccountBalance: userBalance,
       })
 
-      // Set constants
+      // Get my history as user
+      const bikeUserData = bikeInstance.methods.checkUser(accounts[0]);
+      await bikeUserData.call({from: accounts[0]})
+      .then((receipt) => {
+        console.log(receipt);
+        this.setState({
+          inRide: receipt[0],
+          ridesCount: receipt[3],
+          ridesCompleted: receipt[3],
+          goodRidesCount: receipt[4]
+        });
+      });
+
+      // Is the user insured ? 
+      const checkInsured = insuranceInstance.methods.isInsured(accounts[0]);
+      await checkInsured.call({from: accounts[0]})
+      .then((receipt) => {
+        console.log(receipt);
+        this.setState({
+          boughtInsurance: receipt
+        })
+      });
+
+      // Set constants : Deposit / Premium rate / Claim_Token ratio
       const setDeposit = bikeInstance.methods.getBikeValue();
       await setDeposit.call({from: accounts[0]})
       .then((receipt) => {
-        console.log(receipt);
         this.setState({
           depositValue: receipt
         });
@@ -106,7 +135,6 @@ class App extends Component {
       const setPremium = insuranceInstance.methods.getPremiumRate();
       await setPremium.call({from: accounts[0]})
       .then((receipt) => {
-        console.log(receipt);
         this.setState({
           premiumRate: receipt
         });
@@ -115,7 +143,6 @@ class App extends Component {
       const setRatio = insuranceInstance.methods.getClaimTokenRatio();
       await setRatio.call({from: accounts[0]})
       .then((receipt) => {
-        console.log(receipt);
         this.setState({
           ratioClaimToken: receipt
         });
@@ -134,13 +161,14 @@ class App extends Component {
   handleRentBike = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
-    const {accounts, bikeContract, bikeId_in, depositValue, ridesCount}  = this.state;
-    const rentBike = bikeContract.methods.rentBike(bikeId_in);
+    const {accounts, bikeContract, currentBikeId, depositValue, ridesCount}  = this.state;
+    const rentBike = bikeContract.methods.rentBike(currentBikeId);
     await rentBike.send({from: accounts[0], value: depositValue})
     .once('receipt', (receipt) => {
-      console.log(receipt);
+      //console.log(receipt);
       this.setState({
-        ridesCount: ridesCount + 1
+        ridesCount: ridesCount + 1,
+        inRide: 1,
       })
     })
     .on('error', console.error);
@@ -150,17 +178,21 @@ class App extends Component {
   handleSurrenderBike = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
-    const {accounts, bikeContract, bikeId_out, bikeCondition}  = this.state;
-    const surrenderBike = bikeContract.methods.surrenderBike(bikeId_out, bikeCondition);
+    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides}  = this.state;
+    const surrenderBike = bikeContract.methods.surrenderBike(currentBikeId, bikeCondition);
     await surrenderBike.send({from: accounts[0]})
     .once('receipt', (receipt) => {
-      console.log(receipt);
+      //console.log(receipt);
       const getReturned = bikeContract.methods.getReturned(accounts[0]);
       getReturned.call({from: accounts[0]})
       .then((receipt) => {
-        console.log(receipt);
+        //console.log(receipt);
         this.setState({
-          returnedAmount : receipt
+          returnedAmount : receipt,
+          lastBikeId: currentBikeId,
+          inRide: 0,
+          ridesCompleted: ridesCompleted + 1,
+          insuredRides: boughtInsurance ? insuredRides + 1 : 0
         });
       });
     })
@@ -174,7 +206,7 @@ class App extends Component {
     const underwriteInsurance = insuranceContract.methods.underwriteInsurance();
     await underwriteInsurance.send({from: accounts[0], value: this.state.premiumRate})
     .once('receipt', (receipt) => {
-      console.log(receipt);
+      //console.log(receipt);
     })
     .on('error', console.error);
   };
@@ -208,14 +240,14 @@ class App extends Component {
     const pendingPayments = insuranceContract.methods.getPendingPremia(accounts[0]);
     await pendingPayments.call({from: accounts[0]})
     .then((receipt) => {
-      console.log(receipt);
+      //console.log(receipt);
       this.setState({
         pendingPremia: receipt
       });
       const regularize = insuranceContract.methods.regularizePayments();
       regularize.send({from: accounts[0], value: this.state.pendingPremia})
       .once('receipt', (receipt) => {
-        console.log(receipt);
+        //console.log(receipt);
         const getInsuredStatus = insuranceContract.methods.viewInsuranceStatus(accounts[0]);
         getInsuredStatus.call({from: accounts[0]})
         .then((receipt) => {
@@ -248,7 +280,7 @@ class App extends Component {
         const claimReducer = insuranceContract.methods.tokenClaimReducer(tokensRedeemed);
         claimReducer.send({from: accounts[0]})
         .once('receipt', (receipt) => {
-          console.log(receipt);
+          //console.log(receipt);
           this.setState({
             'countClaims': newClaims,
             'tokensOwned': newTokenCount,
@@ -273,6 +305,7 @@ class App extends Component {
           {/*See current account*/} 
           <p className="font-weight-bold">Current User: {this.state.activeAccount}</p>
           <p className="font-weight-bold">User Balance : {this.state.activeAccountBalance}</p>
+          <p className="font-weight-bold">Currently in ride : {(this.state.inRide === 1) ? 'true' : 'false'}</p>
         </div>
 
           {/*Check your balance
@@ -307,7 +340,7 @@ class App extends Component {
                   type="text"
                   pattern="[0-9]*"
                   className="form-control form-control-sm" 
-                  id="bikeId_in"
+                  id="currentBikeId"
                   onInput={this.handleIntInput.bind(this)}
                   onChange = {this.inputChangeHandler}
                 />
@@ -316,34 +349,18 @@ class App extends Component {
             </div>
             <button type="submit">Rent Bike</button>
           </form>
-          <p>You rented bike no. {this.state.bikeId_in} </p>
-          <p>You paid a deposit of {this.state.depositValue}</p>
-
+          {
+           this.state.ridesCount == 0
+           ? <p>This is your first ride !</p>
+           : <p>You last rented bike no. {this.state.currentBikeId} and paid {this.state.depositValue} in deposit </p>
+          }
           <h4 className="font-weight-normal">Surrender Bike</h4> {/*Bike Surrendering*/}
           <form onSubmit={this.handleSurrenderBike}>
             
-            <div className="form-row"> {/*The bike ID*/}
-              <div className="col"></div>
-              <div className="col-3">
-                <label htmlFor="inputBikeID" className="col-form-label">Bike ID</label>
-              </div>
-              <div className="col-4">
-                <input 
-                  type="text"
-                  pattern="[0-9]*"
-                  className="form-control form-control-sm" 
-                  id="bikeId_out"
-                  onInput={this.handleIntInput.bind(this)}
-                  onChange={this.inputChangeHandler}
-                />
-              </div>
-              <div className="col"></div>
-            </div>
-
             <div className="form-row"> {/*The new condition*/}
               <div className="col"></div>
               <div className="col-3">
-                <label htmlFor="inputNewCondition" className="col-form-label">New bike condition</label>
+                <label htmlFor="inputNewCondition" className="col-form-label">Returned bike condition ?</label>
               </div>
               <div className="col-4">
                 <input 
@@ -369,9 +386,11 @@ class App extends Component {
             </div>
             <button type="submit">Return Bike</button>
           </form>
-          <p>You returned bike no. {this.state.bikeId_out} </p>
-          <p>The bike is in good state: {this.state.bikeCondition}</p>
-          <p>You were paid back {this.state.returnedAmount}</p>
+          {
+            this.state.ridesCompleted < this.state.ridesCount
+            ? <p>Waiting for the ride to be completed</p>
+            : <p>You returned bike no. {this.state.lastBikeId} in good state : {(this.state.bikeCondition === true) ? 'true' : 'false'}, so you were returned {this.state.returnedAmount}</p>
+          }
 
       </div> {/*Bike store ends*/}
 
@@ -386,17 +405,22 @@ class App extends Component {
           <h4 className="font-weight-normal">Underwrite insurance</h4>  {/*Underwrite*/}
           <div>
             <button type="submit" onClick={this.handleUnderwriting}>Underwrite</button>
-            <p>You underwrote insurance contract with company {this.state.insuranceAddress}</p>
-            <p>You paid {this.state.premiumRate} as underwriting fee</p>
+            {
+              this.state.boughtInsurance
+              ? <p>You underwrote insurance contract with company {this.state.insuranceAddress} and paid {this.state.premiumRate}</p>
+              : <p>You have no insurance</p>
+            }
           </div>
 
         <h4 className="font-weight-normal">Regularize payments</h4>  {/*Regularize*/}
 
         <div>
           <button type="submit" onClick={this.handleRegularizePayments}>Regularize</button>
-          <p>You paid {this.state.pendingPremia} for {this.state.ridesCount} rides</p>
-          <p>Your historical claim count is {this.state.countClaims}</p>
-          <p>You own {this.state.tokensOwned} {this.state.tokenName} ({this.state.symbol})</p>
+          {
+            this.state.boughtInsurance
+            ? <p>You paid {this.state.pendingPremia} for {this.state.insuredRides} rides, your net claim count is {this.state.countClaims}</p>
+            : <p>You have no insurance</p>
+          }
         </div>
 
         {/* Redeem your tokens -
@@ -406,7 +430,7 @@ class App extends Component {
         */}
         
         <h4 className="font-weight-normal">Redeem Tokens</h4>  {/*Redeem*/}
-        <p>The redemption rate is {this.state.ratioClaimToken}, hence {this.state.ratioClaimToken} is the minimum accepted token</p>
+        <p>The redemption rate is {this.state.ratioClaimToken}, hence {this.state.ratioClaimToken} is the minimum accepted amount of tokens</p>
             <form onSubmit={this.handleRedeemTokens}>
               <div className="form-row"> {/*The bike ID*/}
                 <div className="col"></div>
@@ -428,9 +452,9 @@ class App extends Component {
 
               <button type="submit">Redeem Tokens</button>
             </form>
-
-            <p>You redeemed {this.state.tokensRedeemed}</p>
-            <p>You now own {this.state.tokensOwned}</p>
+            <p>You own {this.state.tokensOwned} {this.state.tokenName} ({this.state.symbol})</p>
+            <p>You redeemed {this.state.tokensRedeemed} tokens</p>
+            <p>You now own {this.state.tokensOwned} tokens</p>
             <p>Your current claims count is {this.state.countClaims}</p>
 
       </div> 

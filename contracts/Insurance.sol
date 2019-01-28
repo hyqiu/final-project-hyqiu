@@ -49,6 +49,8 @@ contract Insurance is Ownable {
         uint256 nbTokensOwned;          // How many tokens the client actually has
         uint256 nbPaybacks;             // Count of paybacks given to user
         uint256 paybackAmount;          // Total amount paid back to user
+        uint256 tareInsuredRides;       // Do not take into account the rides done before purchasing insurance
+        uint256 tareInsuredGoodRides;   // Do not take into account the good rides done before purchasing insurance
     }
 
     /* Instances from other contracts */
@@ -193,7 +195,9 @@ contract Insurance is Ownable {
                 grossTokens: 0,
                 nbTokensOwned: 0,
                 nbPaybacks: 0,
-                paybackAmount: 0
+                paybackAmount: 0,
+                tareInsuredRides: bikeSharing.getTotalRides(msg.sender),
+                tareInsuredGoodRides: bikeSharing.getGoodRides(msg.sender)
             }
         );
         
@@ -244,7 +248,7 @@ contract Insurance is Ownable {
         
         // Distribute rewards
         uint256 pendingTokens = getPendingTokens(msg.sender); 
-        require(insured.grossTokens + pendingTokens == bikeSharing.getGoodRides(msg.sender));
+        require(insured.grossTokens + pendingTokens == tareGoodRidesCount(msg.sender));
         
         if (pendingTokens > 0) {
             emit TokenApproved(msg.sender, pendingTokens);
@@ -293,6 +297,29 @@ contract Insurance is Ownable {
     ================================================================
     */
 
+    function tareRidesCount (address insuranceTaker)
+        internal
+        view
+        insuredClient(insuranceTaker)
+        returns (uint256 insuredTotalRides)
+    {
+        InsuranceClient memory customer = insuranceMapping[insuranceTaker];
+        insuredTotalRides = bikeSharing.getTotalRides(insuranceTaker) - customer.tareInsuredRides;
+        return insuredTotalRides;
+    }
+
+    function tareGoodRidesCount (address insuranceTaker)
+        internal
+        view
+        insuredClient(insuranceTaker)
+        returns (uint256 insuredGoodRides)
+    {
+        InsuranceClient memory customer = insuranceMapping[insuranceTaker];
+        insuredGoodRides = bikeSharing.getGoodRides(insuranceTaker) - customer.tareInsuredGoodRides;
+        return insuredGoodRides;
+    }
+
+
     /** @dev Check the premium applicable to one address
       * @param insuranceTaker The address of the insurance buyer
       * @return premium The premium eligible to the address (depending on the customer's past claims)
@@ -340,7 +367,7 @@ contract Insurance is Ownable {
         returns (uint256 countNewRides) 
     {
         InsuranceClient memory insured = insuranceMapping[insuredAddress];
-        uint256 ridesCount = bikeSharing.getTotalRides(insuredAddress);
+        uint256 ridesCount = tareRidesCount(insuredAddress);
 
         if (ridesCount > insured.totalRides) {
             uint256 newRides = ridesCount.sub(insured.totalRides);
@@ -359,7 +386,7 @@ contract Insurance is Ownable {
         returns (uint256 countBadRides)
     {
         InsuranceClient memory insured = insuranceMapping[insuredAddress];
-        uint256 numberBadRides = bikeSharing.getTotalRides(insuredAddress).sub(bikeSharing.getGoodRides(insuredAddress));
+        uint256 numberBadRides = tareRidesCount(insuredAddress).sub(tareGoodRidesCount(insuredAddress));
         return numberBadRides.sub(insured.nbPaybacks);
     }
 
@@ -373,7 +400,7 @@ contract Insurance is Ownable {
     {
         //address insuredAddress = msg.sender;
         InsuranceClient memory insured = insuranceMapping[insuredAddress];
-        uint256 tokenEligibleRides = bikeSharing.getGoodRides(insuredAddress);
+        uint256 tokenEligibleRides = tareGoodRidesCount(insuredAddress);
         return (tokenEligibleRides.sub(insured.grossTokens)).mul(tokenRewardFactor);
     }
 
