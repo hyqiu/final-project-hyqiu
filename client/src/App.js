@@ -117,11 +117,21 @@ class App extends Component {
       const checkInsured = insuranceInstance.methods.isInsured(accounts[0]);
       await checkInsured.call({from: accounts[0]})
       .then((receipt) => {
-        console.log(receipt);
+        //console.log(receipt);
         this.setState({
           boughtInsurance: receipt
         })
       });
+
+      // Check the insured's status
+      const checkInsuredStatus = insuranceInstance.methods.viewInsuranceStatus(accounts[0]);
+      await checkInsuredStatus.call({from: accounts[0]})
+      .then((receipt) => {
+        this.setState({
+          insuredRides: parseInt(receipt[2]),
+          tokensOwned: parseInt(receipt[6]),
+        })
+      })
 
       // Set constants : Deposit / Premium rate / Claim_Token ratio
       const setDeposit = bikeInstance.methods.getBikeValue();
@@ -157,11 +167,13 @@ class App extends Component {
     }
   };
 
+
 // Event for renting the bike
   handleRentBike = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
     const {accounts, bikeContract, currentBikeId, depositValue, ridesCount}  = this.state;
+          
     const rentBike = bikeContract.methods.rentBike(currentBikeId);
     await rentBike.send({from: accounts[0], value: depositValue})
     .once('receipt', (receipt) => {
@@ -178,7 +190,8 @@ class App extends Component {
   handleSurrenderBike = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
-    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides}  = this.state;
+    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides, tokensOwned}  = this.state;
+    
     const surrenderBike = bikeContract.methods.surrenderBike(currentBikeId, bikeCondition);
     await surrenderBike.send({from: accounts[0]})
     .once('receipt', (receipt) => {
@@ -192,7 +205,8 @@ class App extends Component {
           lastBikeId: currentBikeId,
           inRide: 0,
           ridesCompleted: ridesCompleted + 1,
-          insuredRides: boughtInsurance ? insuredRides + 1 : 0
+          insuredRides: boughtInsurance ? insuredRides + 1 : 0,
+          tokensOwned: bikeCondition ? tokensOwned + 1 : tokensOwned,
         });
       });
     })
@@ -207,6 +221,9 @@ class App extends Component {
     await underwriteInsurance.send({from: accounts[0], value: this.state.premiumRate})
     .once('receipt', (receipt) => {
       //console.log(receipt);
+      this.setState({
+        boughtInsurance: true,
+      })
     })
     .on('error', console.error);
   };
@@ -252,8 +269,8 @@ class App extends Component {
         getInsuredStatus.call({from: accounts[0]})
         .then((receipt) => {
           this.setState({
-            countClaims: receipt[4],
-            tokensOwned: receipt[6]
+            countClaims: parseInt(receipt[4]),
+            tokensOwned: parseInt(receipt[6])
           });
         });
       })
@@ -290,8 +307,6 @@ class App extends Component {
       });
     }
   }
-
-// What can we really do on the user interface side ?! --> please do the render side !!
 
   render() {
     if (!this.state.web3) {

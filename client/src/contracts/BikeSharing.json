@@ -23726,14 +23726,234 @@
       "transactionHash": "0x59fde0f1c8b03cfead4d9108430e486190c85068a44cadf58b023da38f6c586f"
     },
     "1548633001524": {
-      "events": {},
+      "events": {
+        "0xcd77a878eade216fb4b5fe5434897088409c92ce8ce1296f5f6dffb6c32562d8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "bikeId",
+              "type": "uint256"
+            },
+            {
+              "indexed": true,
+              "name": "renter",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "status",
+              "type": "bool"
+            }
+          ],
+          "name": "LogBikeRent",
+          "type": "event",
+          "signature": "0xcd77a878eade216fb4b5fe5434897088409c92ce8ce1296f5f6dffb6c32562d8"
+        },
+        "0x81d2c188629cc4a1c694d285150cb5fa3dde3157a2684460d3ac7a1e331f6164": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "LogReceivedFunds",
+          "type": "event",
+          "signature": "0x81d2c188629cc4a1c694d285150cb5fa3dde3157a2684460d3ac7a1e331f6164"
+        },
+        "0xe0e5873eb9d996d2ab087b071a9a50522121c02b43308c8728c06739f52b3f87": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "recipient",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "LogReturnedFunds",
+          "type": "event",
+          "signature": "0xe0e5873eb9d996d2ab087b071a9a50522121c02b43308c8728c06739f52b3f87"
+        },
+        "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Deposit",
+          "type": "event",
+          "signature": "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c"
+        },
+        "0xbac77b32f9eac52b557987e1084037afcfe4d478ef2fc4c8cdae1eb5f86d40a3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "clientAddress",
+              "type": "address"
+            }
+          ],
+          "name": "ClientCreated",
+          "type": "event",
+          "signature": "0xbac77b32f9eac52b557987e1084037afcfe4d478ef2fc4c8cdae1eb5f86d40a3"
+        },
+        "0x4986b064b569c6fa049687ef20f2083e297cbd4b1166eab7b06a9cb410bb6529": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "bikeId",
+              "type": "uint256"
+            }
+          ],
+          "name": "BikeInitiated",
+          "type": "event",
+          "signature": "0x4986b064b569c6fa049687ef20f2083e297cbd4b1166eab7b06a9cb410bb6529"
+        },
+        "0x7a46d9c879f6df7defefd4f4e68a71c038944432414f667201560cbe345703e2": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "bikeId",
+              "type": "uint256"
+            }
+          ],
+          "name": "BikeDeactivated",
+          "type": "event",
+          "signature": "0x7a46d9c879f6df7defefd4f4e68a71c038944432414f667201560cbe345703e2"
+        },
+        "0x375f37c1f2f99b1f18d30a4aadd72486ac0db7eb3a05cb6ae1c5dafaab222f17": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "bikeId",
+              "type": "uint256"
+            }
+          ],
+          "name": "BikeAvailable",
+          "type": "event",
+          "signature": "0x375f37c1f2f99b1f18d30a4aadd72486ac0db7eb3a05cb6ae1c5dafaab222f17"
+        },
+        "0x5fe9ebeb2d32f13f36a82c6c68d5031d31b95db10a1b0dc75367fd42105d40e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "clientAddress",
+              "type": "address"
+            }
+          ],
+          "name": "ClientGoodToGo",
+          "type": "event",
+          "signature": "0x5fe9ebeb2d32f13f36a82c6c68d5031d31b95db10a1b0dc75367fd42105d40e0"
+        },
+        "0x8b848cd29492de96ebd7b7dcd7e4a54c072464876f6507ef2a8193044832eb44": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "clientAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "bikeId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "time",
+              "type": "uint256"
+            }
+          ],
+          "name": "TripStarted",
+          "type": "event",
+          "signature": "0x8b848cd29492de96ebd7b7dcd7e4a54c072464876f6507ef2a8193044832eb44"
+        },
+        "0x76893845517b4c4d36c69621dd4f1a185de6e4fc3ae28967d16357fc4bfe00d8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "clientAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "bikeId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "time",
+              "type": "uint256"
+            }
+          ],
+          "name": "TripFinished",
+          "type": "event",
+          "signature": "0x76893845517b4c4d36c69621dd4f1a185de6e4fc3ae28967d16357fc4bfe00d8"
+        },
+        "0x67e1f06c646cd0258df4917ba95be6924b550249a7c45eeb41dfd6b8130fd588": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "currentStatus",
+              "type": "bool"
+            }
+          ],
+          "name": "StopSwitchChanged",
+          "type": "event",
+          "signature": "0x67e1f06c646cd0258df4917ba95be6924b550249a7c45eeb41dfd6b8130fd588"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
       "links": {},
-      "address": "0xc16A742B032EA91362E58D3E1aB36086CB30Fae0",
-      "transactionHash": "0xd0af3523e053a4213301c4390ebb3f19fcf9ca98d7fdb33c23b97cdc8aed575b"
+      "address": "0x80150000aF433834036d55F7520e05C3C1FEd6D5",
+      "transactionHash": "0xa0fd60f53db5f4daef9708a3fdd9151a1534b174bd7a1e988cfb1ea704a81854"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-27T23:51:45.589Z",
+  "updatedAt": "2019-01-28T02:40:55.142Z",
   "devdoc": {
     "methods": {
       "calculateFee(uint256)": {
