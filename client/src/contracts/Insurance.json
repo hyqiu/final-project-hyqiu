@@ -31744,6 +31744,12 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0xAAeC2524A0b1137c210f45Ec92C83B3A90445454",
+      "transactionHash": "0x9ca827a7b2a9b07e849e1533bd7fceeb1e555e91ba147e6e70e8b04c670f0772"
+    },
     "1548622358539": {
       "events": {},
       "links": {},
@@ -32105,10 +32111,728 @@
       "links": {},
       "address": "0x49287C35231df36446BC25c691D103E0F8C727Cb",
       "transactionHash": "0x6f9fe724640e7504561029c1d2e961062459cb160ec1b137ea5afd6c2a9008a4"
+    },
+    "1548648422642": {
+      "events": {
+        "0x15911996810002fa9a028e0b1d22fed6950d38d0eb1d13bdb67731340450906a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "bikeShopAddress",
+              "type": "address"
+            }
+          ],
+          "name": "BikeShopLinked",
+          "type": "event",
+          "signature": "0x15911996810002fa9a028e0b1d22fed6950d38d0eb1d13bdb67731340450906a"
+        },
+        "0x2e2b3f61b70d2d131b2a807371103cc98d51adcaa5e9a8f9c32658ad8426e74e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "newTokenAddress",
+              "type": "address"
+            }
+          ],
+          "name": "TokenCreated",
+          "type": "event",
+          "signature": "0x2e2b3f61b70d2d131b2a807371103cc98d51adcaa5e9a8f9c32658ad8426e74e"
+        },
+        "0x805515b67640c20f851bcfe628920684c3d4b6375b7e21f7679b277098b7ee7e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "insAdr",
+              "type": "address"
+            }
+          ],
+          "name": "InsuranceClientCreated",
+          "type": "event",
+          "signature": "0x805515b67640c20f851bcfe628920684c3d4b6375b7e21f7679b277098b7ee7e"
+        },
+        "0xeb508ef7b4d7666e076b057a3c90153f3ac41796184c70f0ac3a430dbeb6702c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "RidesCountUpdate",
+          "type": "event",
+          "signature": "0xeb508ef7b4d7666e076b057a3c90153f3ac41796184c70f0ac3a430dbeb6702c"
+        },
+        "0xc79c05b3818a8c9907a75827511a1a48d25696a505cf124be9fa24bf58a81911": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "TotalPaybackAmountUpdate",
+          "type": "event",
+          "signature": "0xc79c05b3818a8c9907a75827511a1a48d25696a505cf124be9fa24bf58a81911"
+        },
+        "0x7ae56db92f5513f9be7be3f7ac08acd3935e48d358b168ddc9238d9fc4b826b5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "ClaimsUpdate",
+          "type": "event",
+          "signature": "0x7ae56db92f5513f9be7be3f7ac08acd3935e48d358b168ddc9238d9fc4b826b5"
+        },
+        "0x02fd5b5cb41940daa58f4af0c8a130413a57de99a8b83612eff22b759e3fca88": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "NetClaimsUpdate",
+          "type": "event",
+          "signature": "0x02fd5b5cb41940daa58f4af0c8a130413a57de99a8b83612eff22b759e3fca88"
+        },
+        "0x8014034f8e46251a2d27154055e9234573151a53dd5799aa935fdf16e2da985b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "PremiumAmountUpdate",
+          "type": "event",
+          "signature": "0x8014034f8e46251a2d27154055e9234573151a53dd5799aa935fdf16e2da985b"
+        },
+        "0xb46b376a2514eb3b424e9abe3d7113a32260dd7930c7ac87b4012b1b5933d6ad": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "TotalPaybacksUpdate",
+          "type": "event",
+          "signature": "0xb46b376a2514eb3b424e9abe3d7113a32260dd7930c7ac87b4012b1b5933d6ad"
+        },
+        "0x8dee066a804209a6ea3a62bbba37f645f079114114b4723551a76a7174cb5dc0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "count",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "totalAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "ClaimsRepaid",
+          "type": "event",
+          "signature": "0x8dee066a804209a6ea3a62bbba37f645f079114114b4723551a76a7174cb5dc0"
+        },
+        "0xb0b87480890fad11ac18eecf380b75845d7b09f2ab48afd841e78971f9025d98": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenUpdate",
+          "type": "event",
+          "signature": "0xb0b87480890fad11ac18eecf380b75845d7b09f2ab48afd841e78971f9025d98"
+        },
+        "0x9de743de0cc3659ff1f9f12f905980c700847e3d4d79b50d2405efe209671111": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "OwnedTokenUpdate",
+          "type": "event",
+          "signature": "0x9de743de0cc3659ff1f9f12f905980c700847e3d4d79b50d2405efe209671111"
+        },
+        "0xab1e93ce08cc196e636fe318c052f82163b40e499a90a0fdb38912ecd5beae11": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_riderAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_rewardAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenApproved",
+          "type": "event",
+          "signature": "0xab1e93ce08cc196e636fe318c052f82163b40e499a90a0fdb38912ecd5beae11"
+        },
+        "0xeeb3082d4b88d6583484c604325152864741e5e435119ca06f26d82f88dcc0e1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "insuredAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenPaid",
+          "type": "event",
+          "signature": "0xeeb3082d4b88d6583484c604325152864741e5e435119ca06f26d82f88dcc0e1"
+        },
+        "0xa0defc46c92ff3f4a6c3b1a9fe1218139c5267276d9071938792191e930f53b3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "nbTokens",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "claimsInvolved",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokensClaimExchange",
+          "type": "event",
+          "signature": "0xa0defc46c92ff3f4a6c3b1a9fe1218139c5267276d9071938792191e930f53b3"
+        },
+        "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Deposit",
+          "type": "event",
+          "signature": "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c"
+        },
+        "0x67e1f06c646cd0258df4917ba95be6924b550249a7c45eeb41dfd6b8130fd588": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "currentStatus",
+              "type": "bool"
+            }
+          ],
+          "name": "StopSwitchChanged",
+          "type": "event",
+          "signature": "0x67e1f06c646cd0258df4917ba95be6924b550249a7c45eeb41dfd6b8130fd588"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0x910822491B475cd5164B69bA25f97ad0451dB231",
+      "transactionHash": "0x3c8900f52594c9853474ea8a30b2da71b1a69df2601c267fa22c197f513e10f6"
+    },
+    "1548653791540": {
+      "events": {
+        "0x15911996810002fa9a028e0b1d22fed6950d38d0eb1d13bdb67731340450906a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "bikeShopAddress",
+              "type": "address"
+            }
+          ],
+          "name": "BikeShopLinked",
+          "type": "event",
+          "signature": "0x15911996810002fa9a028e0b1d22fed6950d38d0eb1d13bdb67731340450906a"
+        },
+        "0x2e2b3f61b70d2d131b2a807371103cc98d51adcaa5e9a8f9c32658ad8426e74e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "newTokenAddress",
+              "type": "address"
+            }
+          ],
+          "name": "TokenCreated",
+          "type": "event",
+          "signature": "0x2e2b3f61b70d2d131b2a807371103cc98d51adcaa5e9a8f9c32658ad8426e74e"
+        },
+        "0x805515b67640c20f851bcfe628920684c3d4b6375b7e21f7679b277098b7ee7e": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "insAdr",
+              "type": "address"
+            }
+          ],
+          "name": "InsuranceClientCreated",
+          "type": "event",
+          "signature": "0x805515b67640c20f851bcfe628920684c3d4b6375b7e21f7679b277098b7ee7e"
+        },
+        "0xeb508ef7b4d7666e076b057a3c90153f3ac41796184c70f0ac3a430dbeb6702c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "RidesCountUpdate",
+          "type": "event",
+          "signature": "0xeb508ef7b4d7666e076b057a3c90153f3ac41796184c70f0ac3a430dbeb6702c"
+        },
+        "0xc79c05b3818a8c9907a75827511a1a48d25696a505cf124be9fa24bf58a81911": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "TotalPaybackAmountUpdate",
+          "type": "event",
+          "signature": "0xc79c05b3818a8c9907a75827511a1a48d25696a505cf124be9fa24bf58a81911"
+        },
+        "0x7ae56db92f5513f9be7be3f7ac08acd3935e48d358b168ddc9238d9fc4b826b5": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "ClaimsUpdate",
+          "type": "event",
+          "signature": "0x7ae56db92f5513f9be7be3f7ac08acd3935e48d358b168ddc9238d9fc4b826b5"
+        },
+        "0x02fd5b5cb41940daa58f4af0c8a130413a57de99a8b83612eff22b759e3fca88": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "NetClaimsUpdate",
+          "type": "event",
+          "signature": "0x02fd5b5cb41940daa58f4af0c8a130413a57de99a8b83612eff22b759e3fca88"
+        },
+        "0x8014034f8e46251a2d27154055e9234573151a53dd5799aa935fdf16e2da985b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "PremiumAmountUpdate",
+          "type": "event",
+          "signature": "0x8014034f8e46251a2d27154055e9234573151a53dd5799aa935fdf16e2da985b"
+        },
+        "0xb46b376a2514eb3b424e9abe3d7113a32260dd7930c7ac87b4012b1b5933d6ad": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "TotalPaybacksUpdate",
+          "type": "event",
+          "signature": "0xb46b376a2514eb3b424e9abe3d7113a32260dd7930c7ac87b4012b1b5933d6ad"
+        },
+        "0x8dee066a804209a6ea3a62bbba37f645f079114114b4723551a76a7174cb5dc0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "count",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "totalAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "ClaimsRepaid",
+          "type": "event",
+          "signature": "0x8dee066a804209a6ea3a62bbba37f645f079114114b4723551a76a7174cb5dc0"
+        },
+        "0xb0b87480890fad11ac18eecf380b75845d7b09f2ab48afd841e78971f9025d98": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenUpdate",
+          "type": "event",
+          "signature": "0xb0b87480890fad11ac18eecf380b75845d7b09f2ab48afd841e78971f9025d98"
+        },
+        "0x9de743de0cc3659ff1f9f12f905980c700847e3d4d79b50d2405efe209671111": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "client",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "newValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "byHowMuch",
+              "type": "uint256"
+            }
+          ],
+          "name": "OwnedTokenUpdate",
+          "type": "event",
+          "signature": "0x9de743de0cc3659ff1f9f12f905980c700847e3d4d79b50d2405efe209671111"
+        },
+        "0xab1e93ce08cc196e636fe318c052f82163b40e499a90a0fdb38912ecd5beae11": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "_riderAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_rewardAmount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenApproved",
+          "type": "event",
+          "signature": "0xab1e93ce08cc196e636fe318c052f82163b40e499a90a0fdb38912ecd5beae11"
+        },
+        "0xeeb3082d4b88d6583484c604325152864741e5e435119ca06f26d82f88dcc0e1": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "insuredAddress",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokenPaid",
+          "type": "event",
+          "signature": "0xeeb3082d4b88d6583484c604325152864741e5e435119ca06f26d82f88dcc0e1"
+        },
+        "0xa0defc46c92ff3f4a6c3b1a9fe1218139c5267276d9071938792191e930f53b3": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "from",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "nbTokens",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "claimsInvolved",
+              "type": "uint256"
+            }
+          ],
+          "name": "TokensClaimExchange",
+          "type": "event",
+          "signature": "0xa0defc46c92ff3f4a6c3b1a9fe1218139c5267276d9071938792191e930f53b3"
+        },
+        "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "value",
+              "type": "uint256"
+            }
+          ],
+          "name": "Deposit",
+          "type": "event",
+          "signature": "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c"
+        },
+        "0x67e1f06c646cd0258df4917ba95be6924b550249a7c45eeb41dfd6b8130fd588": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "currentStatus",
+              "type": "bool"
+            }
+          ],
+          "name": "StopSwitchChanged",
+          "type": "event",
+          "signature": "0x67e1f06c646cd0258df4917ba95be6924b550249a7c45eeb41dfd6b8130fd588"
+        },
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event",
+          "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        }
+      },
+      "links": {},
+      "address": "0xdC517170E89ec7803A4da28f9Da7412145dba3Ad",
+      "transactionHash": "0xcb95d627f9e75448bb729d40bde786f0c76b5004f1721312f2471c089c7db44c"
+    },
+    "1548656622726": {
+      "events": {},
+      "links": {},
+      "address": "0xAAeC2524A0b1137c210f45Ec92C83B3A90445454",
+      "transactionHash": "0x1e3a7cf87d60c081eb4f14b4ec89e5edf9b5a06a0d7270fafa57674e7b1b58e6"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-28T02:40:55.172Z",
+  "updatedAt": "2019-01-28T06:23:59.997Z",
   "devdoc": {
     "methods": {
       "constructor": {

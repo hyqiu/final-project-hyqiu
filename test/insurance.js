@@ -1,5 +1,6 @@
 const BikeSharing = artifacts.require('../contracts/BikeSharing.sol');
 const Insurance = artifacts.require('../contracts/Insurance.sol');
+const truffleAssert = require('truffle-assertions');
 
 contract('Insurance', function(accounts) {
 
@@ -100,5 +101,16 @@ contract('Insurance', function(accounts) {
 		assert.equal(result[4], 0, 'Net claims should have decreased');
 
 	});
+
+	it("should not be allowed for someone else than the owner to user the switch", async () => {
+		try {
+			await insuranceCompany.emergencySwitch({from: myUser});
+		} catch (e) {
+			return true;
+		}
+		throw new Error("This should not appear");
+	})
+
+
 
 })

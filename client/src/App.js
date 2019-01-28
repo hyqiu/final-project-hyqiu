@@ -128,17 +128,18 @@ class App extends Component {
       await checkInsuredStatus.call({from: accounts[0]})
       .then((receipt) => {
         this.setState({
-          insuredRides: receipt[2],
-          tokensOwned: receipt[6],
+          insuredRides: parseInt(receipt[2]),
+          tokensOwned: parseInt(receipt[6]),
         })
-      })
+      });
 
       const checkPendingPremia = insuranceInstance.methods.getPendingPremia(accounts[0]);
       await checkPendingPremia.call({from: accounts[0]})
       .then((receipt) => {
-        this.setState({
-          pendingPremia: receipt,
-        })
+       console.log(receipt);
+       this.setState({
+         pendingPremia: receipt,
+       })
       });
 
       // Set constants : Deposit / Premium rate / Claim_Token ratio
@@ -236,6 +237,16 @@ class App extends Component {
     .on('error', console.error);
   };
 
+  handleBalanceRefresh = async (event) => {
+    event.preventDefault();
+    await this.handleAccountChange();
+    const web3 = await getWeb3();
+    const userBalance = await web3.eth.getBalance(this.state.activeAccount);
+    this.setState({
+      activeAccountBalance: userBalance,
+    })
+  }
+
 // Handle radio button calls
   radioHandler = (event) => {
     if(event.target.value === "BadCondition"){
@@ -277,8 +288,8 @@ class App extends Component {
         getInsuredStatus.call({from: accounts[0]})
         .then((receipt) => {
           this.setState({
-            countClaims: parseInt(receipt[4]),
-            tokensOwned: parseInt(receipt[6])
+            countClaims: receipt[4],
+            tokensOwned: receipt[6]
           });
         });
       })
@@ -328,6 +339,7 @@ class App extends Component {
           {/*See current account*/} 
           <p className="font-weight-bold">Current User: {this.state.activeAccount}</p>
           <p className="font-weight-bold">User Balance : {this.state.activeAccountBalance}</p>
+          <button type="submit" onClick={this.handleBalanceRefresh}>Refresh</button>
           <p className="font-weight-bold">Currently in ride : {(this.state.inRide === 1) ? 'true' : 'false'}</p>
         </div>
 
