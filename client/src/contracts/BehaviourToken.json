@@ -2022,12 +2022,12 @@
     "1548656622726": {
       "events": {},
       "links": {},
-      "address": "0x16C87E03FDA792DE420DD03584D02dbdF428E590",
-      "transactionHash": "0xa4f7a6df7d13d1baa7d560375cf31fa1f45548cd26ea7adc49b1ab0e6f70b553"
+      "address": "0x9eF323e1b063Bf7414B6d05705af9a60f285247A",
+      "transactionHash": "0xec49ba912f3434bf00a5a5009b4ed70d67d1cfe0528edb74a5024fc5e0afa290"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-28T06:23:59.924Z",
+  "updatedAt": "2019-01-28T08:27:42.623Z",
   "devdoc": {
     "methods": {
       "allowance(address,address)": {
