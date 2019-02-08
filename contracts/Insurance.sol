@@ -415,7 +415,7 @@ contract Insurance is Ownable {
     /// @return claimsToDecrease The claims that can be decreased with nbTokens
     /// @return exchangedTokens The tokens that will be exchanged to decrease the claims.
     function tokenAccounting(uint256 nbTokens)
-        internal
+        public
         view
         positiveInput(nbTokens)
         returns (uint256 claimsToDecrease, uint256 exchangedTokens)

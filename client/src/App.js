@@ -36,6 +36,7 @@ class App extends Component {
       pendingPremia: 0,
       countClaims: 0,
       insuredRides: 0,
+      applicablePremium: 0,
       
       // Tokens
       tokenName: 'BehaviourToken',
@@ -153,6 +154,7 @@ class App extends Component {
       const setRatio = insuranceInstance.methods.getClaimTokenRatio();
       await setRatio.call({from: accounts[0]})
       .then((receipt) => {
+        //console.log(receipt);
         this.setState({
           ratioClaimToken: receipt
         });
@@ -190,7 +192,7 @@ class App extends Component {
   handleSurrenderBike = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
-    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides, tokensOwned}  = this.state;
+    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides, tokensOwned, applicablePremium}  = this.state;
     
     const surrenderBike = bikeContract.methods.surrenderBike(currentBikeId, bikeCondition);
     await surrenderBike.send({from: accounts[0]})
@@ -206,7 +208,8 @@ class App extends Component {
           inRide: 0,
           ridesCompleted: ridesCompleted + 1,
           insuredRides: boughtInsurance ? insuredRides + 1 : 0,
-          tokensOwned: bikeCondition ? tokensOwned + 1 : tokensOwned,
+          tokensOwned: bikeCondition && boughtInsurance ? tokensOwned + 1 : tokensOwned,
+          applicablePremium: boughtInsurance ? applicablePremium : 0,
         });
       });
     })
@@ -319,7 +322,6 @@ class App extends Component {
         <div className="py-3">
           {/*See current account*/} 
           <p className="font-weight-bold">Current User: {this.state.activeAccount}</p>
-          <p className="font-weight-bold">User Balance : {this.state.activeAccountBalance}</p>
           <p className="font-weight-bold">Currently in ride : {(this.state.inRide === 1) ? 'true' : 'false'}</p>
         </div>
 
@@ -367,7 +369,7 @@ class App extends Component {
           {
            this.state.ridesCount == 0
            ? <p>This is your first ride !</p>
-           : <p>You last rented bike no. {this.state.currentBikeId} and paid {this.state.depositValue} in deposit </p>
+           : <p>You last rented bike no. {this.state.currentBikeId} and paid {this.state.depositValue} wei in deposit </p>
           }
           <h4 className="font-weight-normal">Surrender Bike</h4> {/*Bike Surrendering*/}
           <form onSubmit={this.handleSurrenderBike}>
@@ -383,7 +385,6 @@ class App extends Component {
                   className="form-control radio" 
                   name="radio-condition"
                   value="BadCondition"
-                  defaultChecked
                   onChange={this.radioHandler}
                 />
                 <label className="k-radio-label">Bad condition</label>
@@ -404,7 +405,7 @@ class App extends Component {
           {
             this.state.ridesCompleted < this.state.ridesCount
             ? <p>Waiting for the ride to be completed</p>
-            : <p>You returned bike no. {this.state.lastBikeId} in good state : {(this.state.bikeCondition === true) ? 'true' : 'false'}, so you were returned {this.state.returnedAmount}</p>
+            : <p>You returned bike no. {this.state.lastBikeId} in good state : {(this.state.bikeCondition === true) ? 'true' : 'false'}, so you were returned {this.state.returnedAmount} wei</p>
           }
 
       </div> {/*Bike store ends*/}
@@ -422,7 +423,7 @@ class App extends Component {
             <button type="submit" onClick={this.handleUnderwriting}>Underwrite</button>
             {
               this.state.boughtInsurance
-              ? <p>You underwrote insurance contract with company {this.state.insuranceAddress} and paid {this.state.premiumRate}</p>
+              ? <p>You underwrote insurance contract with company {this.state.insuranceAddress} and paid {this.state.premiumRate} wei as upfront premium</p>
               : <p>You have no insurance</p>
             }
           </div>
@@ -433,7 +434,7 @@ class App extends Component {
           <button type="submit" onClick={this.handleRegularizePayments}>Regularize</button>
           {
             this.state.boughtInsurance
-            ? <p>You paid {this.state.pendingPremia} for {this.state.insuredRides} rides, your net claim count is {this.state.countClaims}</p>
+            ? <p>You paid {this.state.pendingPremia} wei for {this.state.insuredRides} insured rides, your net claim count is {this.state.countClaims}</p>
             : <p>You have no insurance</p>
           }
         </div>
@@ -445,6 +446,11 @@ class App extends Component {
         */}
         
         <h4 className="font-weight-normal">Redeem Tokens</h4>  {/*Redeem*/}
+        {
+          this.state.boughtInsurance
+          ? <p>You own {this.state.tokensOwned} {this.state.tokenName} ({this.state.symbol})</p>
+          : <p>You have no insurance</p>
+        }        
         <p>The redemption rate is {this.state.ratioClaimToken}, hence {this.state.ratioClaimToken} is the minimum accepted amount of tokens</p>
             <form onSubmit={this.handleRedeemTokens}>
               <div className="form-row"> {/*The bike ID*/}
@@ -467,10 +473,14 @@ class App extends Component {
 
               <button type="submit">Redeem Tokens</button>
             </form>
-            <p>You own {this.state.tokensOwned} {this.state.tokenName} ({this.state.symbol})</p>
-            <p>You redeemed {this.state.tokensRedeemed} tokens</p>
-            <p>You now own {this.state.tokensOwned} tokens</p>
-            <p>Your current claims count is {this.state.countClaims}</p>
+            {
+              /*
+              <p>You own {this.state.tokensOwned} {this.state.tokenName} ({this.state.symbol})</p>
+              <p>You redeemed {this.state.tokensRedeemed} tokens</p>
+              <p>You now own {this.state.tokensOwned} tokens</p>
+              <p>Your current claims count is {this.state.countClaims}</p>
+              */
+            }
 
       </div> 
     </div> 
