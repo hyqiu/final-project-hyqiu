@@ -1,4 +1,5 @@
 {
+  "homepage": "http://hyqiu.github.io/ca_react_dapp",
   "name": "submission",
   "version": "1.0.0",
   "description": "",
@@ -7,14 +8,20 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "create-react-app": "^2.1.3",
     "openzeppelin-solidity": "2.1.2",
     "truffle-assertions": "^0.7.2",
     "truffle-hdwallet-provider": "^1.0.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
 }

@@ -201,7 +201,7 @@ class App extends Component {
       const getReturned = bikeContract.methods.getReturned(accounts[0]);
       getReturned.call({from: accounts[0]})
       .then((receipt) => {
-        //console.log(receipt);
+        console.log(receipt);
         this.setState({
           returnedAmount : receipt,
           lastBikeId: currentBikeId,
