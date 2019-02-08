@@ -33559,10 +33559,16 @@
       "links": {},
       "address": "0x9E012a3003F792EbfE82505A9E11E360aAeF7ece",
       "transactionHash": "0xe8de65b5d5ac1ec7b37df3af5ca928ad3140b805b79f696fb1368d8cdf25e065"
+    },
+    "1549590731348": {
+      "events": {},
+      "links": {},
+      "address": "0xAAeC2524A0b1137c210f45Ec92C83B3A90445454",
+      "transactionHash": "0xc98b1d56d8a7a1958645aa2386c39111786345e7a3546901f477288c3930b9ec"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-02-08T01:22:43.406Z",
+  "updatedAt": "2019-02-08T01:55:18.701Z",
   "devdoc": {
     "methods": {
       "constructor": {

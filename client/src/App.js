@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import BikeSharing from "./contracts/BikeSharing.json";
-import Insurance from "./contracts/Insurance.json";
+import BikeSharing from "./build/contracts/BikeSharing.json";
+import Insurance from "./build/contracts/Insurance.json";
 import getWeb3 from "./utils/getWeb3";
 
 import "./App.css";
@@ -192,7 +192,7 @@ class App extends Component {
   handleSurrenderBike = async (event) => {
     event.preventDefault();
     await this.handleAccountChange();
-    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides, tokensOwned, applicablePremium}  = this.state;
+    const {accounts, bikeContract, currentBikeId, bikeCondition, ridesCompleted, boughtInsurance, insuredRides, tokensOwned, applicablePremium, countClaims}  = this.state;
     
     const surrenderBike = bikeContract.methods.surrenderBike(currentBikeId, bikeCondition);
     await surrenderBike.send({from: accounts[0]})

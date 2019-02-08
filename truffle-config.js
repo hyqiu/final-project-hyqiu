@@ -25,9 +25,11 @@
 const HDWallet = require('truffle-hdwallet-provider');
 const infuraKey = "f9c59a8fd6734db58b7c2d8766ee2cea";
 //
- const fs = require('fs');
+const fs = require('fs');
  //const mnemonic = fs.readFileSync(".secret").toString().trim();
- const mnemonic = "spell know under retreat soup nation toilet tomorrow menu fan luggage glad";
+const mnemonic = "spell know under retreat soup nation toilet tomorrow menu fan luggage glad";
+
+const fullPathBuildDirectory = './client/src/build/contracts';
 
 module.exports = {
   /**
@@ -39,6 +41,8 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
+
+  contracts_build_directory: fullPathBuildDirectory,
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default

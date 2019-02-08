@@ -2030,10 +2030,16 @@
       "links": {},
       "address": "0x9f448FAce46e7Ca7F31F5528E378b58986634320",
       "transactionHash": "0x2c9bfd80212eba5f74675a7a6d8e9345bda25c1abb1d91d600abab51b91b45a9"
+    },
+    "1549590731348": {
+      "events": {},
+      "links": {},
+      "address": "0x16C87E03FDA792DE420DD03584D02dbdF428E590",
+      "transactionHash": "0x3d758c7e692e9db520a1b2d0009214c3ae7d2e6ec5646e960d1272261028d5e5"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-02-08T01:22:43.349Z",
+  "updatedAt": "2019-02-08T01:55:18.608Z",
   "devdoc": {
     "methods": {
       "allowance(address,address)": {

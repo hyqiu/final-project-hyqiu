@@ -25242,10 +25242,16 @@
       "links": {},
       "address": "0x31e8f0a3E0606867fFfcbCd65Dd76d9D7dF5040C",
       "transactionHash": "0x0902267c47f8388e8bd2fed1a5d07f0d31127027f664d17ad5b9f16f13dc657b"
+    },
+    "1549590731348": {
+      "events": {},
+      "links": {},
+      "address": "0xA1c1188ac92794Ac823935587A25c37e65F18227",
+      "transactionHash": "0x368af0aba8632b2f98f8d9a4045df8a6219da89bb7128aeebe65247552969bad"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-02-08T01:22:43.372Z",
+  "updatedAt": "2019-02-08T01:55:18.637Z",
   "devdoc": {
     "methods": {
       "calculateFee(uint256)": {
