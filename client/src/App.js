@@ -210,6 +210,7 @@ class App extends Component {
           insuredRides: boughtInsurance ? insuredRides + 1 : 0,
           tokensOwned: bikeCondition && boughtInsurance ? tokensOwned + 1 : tokensOwned,
           applicablePremium: boughtInsurance ? applicablePremium : 0,
+          countClaims: !bikeCondition && boughtInsurance ? countClaims + 1 : countClaims,
         });
       });
     })
