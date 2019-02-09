@@ -8,3 +8,16 @@ Network: rinkeby (id: 4)
 	BikeSharing: 0xA1c1188ac92794Ac823935587A25c37e65F18227
 	Insurance: 0xAAeC2524A0b1137c210f45Ec92C83B3A90445454
 	BehaviourToken: 0x16C87E03FDA792DE420DD03584D02dbdF428E590
+
+==================================================================================================================================
+
+The following networks are configured to match any network id (‘*’):
+
+   development
+
+Closely inspect the deployed networks below, and use `truffle networks --clean` to remove any networks that don’t match your configuration. You should not use the wildcard configuration (‘*’) for staging and production networks for which you intend to deploy your application.
+
+Network: rinkeby (id: 4)
+	BikeSharing: 0xfA029A86E1Ca2b92d40DFef06b60C7C8fEc02Fc1
+	Insurance: 0xA1dC3528AeF39bF8DD77674108A00ceB8e32d6BC
+	BehaviourToken: 0x8f799809cD947506A9224e6623e348D88c1b86F1
